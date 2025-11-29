@@ -1,71 +1,75 @@
-We need to completely **redesign and expand** our current Next.js + Tailwind CSS hackathon project ("StellarGo"). The current state is too basic. We need to transform it into a high-end, modern "Location-Based Platform".
+**ACT AS:** Lead Senior Frontend Engineer & UX/UI Designer specialized in Web3/Stellar applications.
 
-### 1. Design System & UX Overhaul
-* **Theme:** "Neo-Fintech". Use a clean, trustworthy palette (Stellar purples/blues mixed with slate grays and ample whitespace). High-end glassmorphism effects for cards.
-* **Responsiveness:** Mobile-First approach is critical.
-    * **Desktop:** Professional Sidebar navigation.
-    * **Mobile:** App-like Bottom Navigation Bar.
-* **Animations:** Use `framer-motion` for smooth page transitions and interactive elements (buttons, modals).
+**TASK:** Perform a complete rewrite and redesign of the existing Next.js Stellar Hackathon project.
+**GOAL:** Create a production-ready, highly animated, visually stunning "Location-Based SocialFi Platform" named "StellarGo".
 
-### 2. Wallet & Auth Strategy (CRITICAL CHANGE)
-* **Hybrid Connection:** Instead of relying on the Freighter extension (which breaks demos if not installed), implement a **"Wallet Adapter"** component.
-    * **Option A (Real):** Connect via Freighter.
-    * **Option B (Demo/Mock):** A "Demo Login" button that simulates a connected wallet with a fake address and balance. This is crucial for the judges to test the UI without installing extensions.
-	* **Option B (Real):** Use stellar Soroban Next.js Auth components to signin with Wallet**.
-* **Onboarding Flow:** When a user connects for the first time, show a "Persona Selection" screen:
-    * *Individual:* (Friends & Family)
-    * *Business:* (Targeting Customers)
-    * *Non-Profit:* (Education/Charity)
-	* *Other*
-    * This selection should be stored in the user context/state.
+**CRITICAL INSTRUCTION:**
+1.  **DELETE** all existing styles and layout components. We are starting fresh.
+2.  **THEME:** Use a "Modern Eco-Cyber" aesthetic.
+    * **Colors:** Deep Emerald Greens, Neon Light Greens, Dark Greys/Blacks (for contrast).
+    * **Backgrounds:** NO plain white backgrounds. Use subtle gradients, mesh gradients, or abstract geometric patterns with lighting effects.
+    * **Mode:** Dark mode by default (looks more premium for crypto), with high-contrast text.
+3.  **RESPONSIVENESS (Strict):**
+    * **Desktop:** Professional Glassmorphism Top Navbar.
+    * **Mobile:** App-like Bottom Navigation Bar (Fixed position, with icons).
+    * **Transitions:** Smooth page transitions using `framer-motion`.
 
-### 3. Required Pages & Features (Redesign All)
+**NEW FEATURE REQUIREMENTS & PAGES:**
 
-**A. Landing Page (Home - Public)**
-* **Hero Section:** High-energy, explaining the "Geo-Drop" concept. "Don't just hold crypto, find it."
-* **Value Prop:** Explain use cases for the 3 personas (Business, Person, NGO).
-* **Why Stellar?:** A section dedicated to why this is built on Stellar (Speed, Low Fees).
-* **Leaderboard Preview:** Show top droppers.
-* **Footer:** Links to GitHub, LinkedIn, and Socials.
-* **Q&A Floating Action Button:** A distinct, pulsing/animated button (bottom right) that opens a Q&A modal/page.
+1.  **Landing Page (Home - `/`):**
+    * Must be separate from the main app dashboard.
+    * **Hero Section:** High-impact text, 3D-style illustration or abstract green glowing orb, "Launch App" button.
+    * **Content:** Explain "Why Stellar?" (Speed, Cost), "Who is it for?" (Companies, Friends, Non-profits).
+    * **Footer:** Links to GitHub, LinkedIn, Terms.
 
-**B. Dashboard (Private)**
-* Overview of balance, active drops, and recent activity charts (Chart.js).
+2.  **Onboarding Flow (First Time Login):**
+    * If a wallet connects for the first time, show a Modal/Page: "Who are you?"
+    * **Options:** Individual (Personal Use), Company (Customer Loyalty), Non-Profit (Charity Drops).
+    * Save this to the database (MongoDB).
 
-**C. New Transfer Hub (The Core)**
-Split this page into two distinct tabs/modes:
-1.  **Direct Transfer:** Input Wallet Address + Amount + Memo.
-2.  **Geo-Drop (Map Based):**
-    * Open full-screen map to select location (or use current GPS).
-    * **Detailed Preferences:**
-        * Amount to drop.
-        * Target Audience (e.g., "Anyone", "Verified Humans", "Customers").
-        * Expiration Time (e.g., "24 Hours").
-        * Message/Hint.
-		* Hide it on the map ?, Who can view it on the Map.
+3.  **Dashboard (The Map - `/app`):**
+    * Full-screen map integration (Leaflet or Mapbox).
+    * Show "Drops" as glowing green pins.
+    * Sidebar (Desktop) / Drawer (Mobile) to manage filters.
 
-**D. Map Explorer**
-* A full-screen, Pokémon GO style map showing available drops nearby.
-* Different markers for different drop types (Business promo vs. Friendly gift).
+4.  **New Transfer Hub (`/transfer`):**
+    * **Tab 1: Direct Transfer:** Input Wallet Address -> Send XLM.
+    * **Tab 2: Geo-Drop (The Killer Feature):**
+        * Select Location (Current GPS or Pick on Map).
+        * **Settings:** Amount, Message, *Target Audience* (e.g., "Only for my friends" or "Public"), *Expiration Time*.
+    * **UX:** Use a stepper for the Drop creation (Step 1: Location -> Step 2: Details -> Step 3: Sign).
 
-**E. Transactions History**
-* A detailed table showing:
-    * Direct Transfers (Sent/Received).
-    * Drops Placed (Claimed/Unclaimed).
-    * Drops Collected.
+5.  **Transactions History (`/history`):**
+    * Visual difference between "Direct Sent" and "Drop Claimed".
+    * List who claimed your drops.
 
-**F. Profile & Settings**
-* Edit Username, Avatar, and View "User Type" (Persona).
+6.  **Leaderboard (`/leaderboard`):**
+    * "Top Droppers" and "Top Hunters". Gamification elements.
 
-**G. Reacords**
-* A page shows who is the most presones that Droped and Collected on the App
+7.  **Wallet Connection:**
+    * Do NOT just use a raw browser alert.
+    * Create a custom UI Component `WalletConnectModal`.
+    * It should explain "Connect to Stellar" and gracefully handle the `@stellar/freighter-api` connection. If the extension is missing, show a beautiful "Install Wallet" guide instead of breaking.
 
-### 4. Documentation (Overwrite existing MD files)
-Please delete old documentation and generate **4 separate markdown files** with professional content:
-1.  `INSTALL.md`: Step-by-step setup (npm install, env variables).
-2.  `RUN.md`: How to run locally and use the "Demo Mode".
-3.  `DEPLOY.md`: Instructions for Vercel/Netlify deployment and Stellar Testnet funding.
-4.  `README.md`: The main project face. Professional introduction, features list, tech stack, and "Why Stellar" explanation.
+**TECH STACK:**
+* **Framework:** Next.js 14+ (App Router).
+* **Styling:** Tailwind CSS + `framer-motion` (for all micro-interactions, hover states, page loads).
+* **Icons:** `lucide-react`.
 
-### Execution Plan
-Please generate the code for the **Layouts (Sidebar/BottomNav)**, the **Wallet Context (with Demo mode)**, and the **New Transfer Page** first, as these are the most complex. Then provide the updated **Landing Page**.
+**DELIVERABLES:**
+1.  **Refactored Folder Structure:** `src/app`, `src/components` (Atoms, Molecules), `src/hooks`.
+2.  **Global `layout.tsx`:** Handling the responsive Navbars and Theme Provider.
+3.  **Components:** Reusable Cards, Buttons, Inputs with consistent spacing/radius.
+4.  **Docs:** DELETE old MD files. Create:
+    * `INSTALL.md`: How to install dependencies.
+    * `RUN.md`: How to run dev server.
+    * `DEPLOY.md`: How to deploy to Vercel + Stellar Testnet info.
+    * `README.md`: The main project overview.
+
+**DESIGN SYSTEM TOKENS:**
+* Primary: `#10B981` (Emerald-500)
+* Secondary: `#064E3B` (Emerald-900)
+* Accent: `#34D399` (Emerald-400)
+* Background: `#020617` (Slate-950) with radial gradients.
+
+Start by defining the file structure and the main `layout.tsx` with the responsive navigation logic.

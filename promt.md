@@ -1,75 +1,61 @@
-**ACT AS:** Lead Senior Frontend Engineer & UX/UI Designer specialized in Web3/Stellar applications.
+**Act as a Lead Frontend Architect and UI/UX Designer specialized in Web3.**
 
-**TASK:** Perform a complete rewrite and redesign of the existing Next.js Stellar Hackathon project.
-**GOAL:** Create a production-ready, highly animated, visually stunning "Location-Based SocialFi Platform" named "StellarGo".
+I need a complete overhaul of my existing Next.js (App Router) Stellar project ("StellarGo"). The current design is too basic/white. I need a high-end, futuristic, "Dark Mode" aesthetic with a **Green** primary color palette.
 
-**CRITICAL INSTRUCTION:**
-1.  **DELETE** all existing styles and layout components. We are starting fresh.
-2.  **THEME:** Use a "Modern Eco-Cyber" aesthetic.
-    * **Colors:** Deep Emerald Greens, Neon Light Greens, Dark Greys/Blacks (for contrast).
-    * **Backgrounds:** NO plain white backgrounds. Use subtle gradients, mesh gradients, or abstract geometric patterns with lighting effects.
-    * **Mode:** Dark mode by default (looks more premium for crypto), with high-contrast text.
-3.  **RESPONSIVENESS (Strict):**
-    * **Desktop:** Professional Glassmorphism Top Navbar.
-    * **Mobile:** App-like Bottom Navigation Bar (Fixed position, with icons).
-    * **Transitions:** Smooth page transitions using `framer-motion`.
+**1. GLOBAL DESIGN SYSTEM & THEME:**
+* **Color Palette:** Deep blacks/grays for background, Neon Green (#00FF41 or similar) for primary actions, subtle gradients.
+* **Background:** NEVER use a plain white or solid black background. Create a global wrapper with **animated, moving colored lights/blobs** (using CSS blurry gradients or Framer Motion) behind a glassmorphism layer. It should look alive.
+* **Typography:** Modern sans-serif (Inter or Rajdhani). Large, bold headings.
+* **Responsiveness:** * **Desktop:** Floating Glass Navbar at the TOP.
+    * **Mobile:** Glass Tab Bar at the BOTTOM with smooth icons.
+* **Animations:** Use `framer-motion` for page transitions, button hovers (glow effects), and scroll reveals.
+* **Wallet Connection:** switch from raw `@stellar/freighter-api` to **`@creit.tech/stellar-wallets-kit`** (or similar kit) to provide a modern "Select Wallet" modal UI instead of just triggering the extension.
 
-**NEW FEATURE REQUIREMENTS & PAGES:**
+**2. USER FLOW & PAGES (Re-structure everything):**
 
-1.  **Landing Page (Home - `/`):**
-    * Must be separate from the main app dashboard.
-    * **Hero Section:** High-impact text, 3D-style illustration or abstract green glowing orb, "Launch App" button.
-    * **Content:** Explain "Why Stellar?" (Speed, Cost), "Who is it for?" (Companies, Friends, Non-profits).
-    * **Footer:** Links to GitHub, LinkedIn, Terms.
+* **A. Landing Page (Public Home):**
+    * **Hero Section:** High-energy text ("Crypto on the Streets"), animated 3D-style elements.
+    * **Value Prop:** Explain it's a "Platform" for Companies (marketing drops), Users (social), and Non-profits.
+    * **Live Leaderboard:** "Most Active Droppers".
+    * **Q&A Fab:** A floating, pulsing button for Q&A that opens a stylish overlay.
+    * **Footer:** Links to GitHub/LinkedIn.
+    * **Call to Action:** "Launch App" button (redirects to Dashboard).
 
-2.  **Onboarding Flow (First Time Login):**
-    * If a wallet connects for the first time, show a Modal/Page: "Who are you?"
-    * **Options:** Individual (Personal Use), Company (Customer Loyalty), Non-Profit (Charity Drops).
-    * Save this to the database (MongoDB).
+* **B. Onboarding (First Login):**
+    * After connecting wallet, ask: "Who are you?"
+    * Options: Personal User, Company (Marketing), Non-Profit (Events).
+    * Save this to MongoDB user profile.
 
-3.  **Dashboard (The Map - `/app`):**
-    * Full-screen map integration (Leaflet or Mapbox).
-    * Show "Drops" as glowing green pins.
-    * Sidebar (Desktop) / Drawer (Mobile) to manage filters.
+* **C. Dashboard (Main App):**
+    * Overview of balance, active drops, and recent activity.
 
-4.  **New Transfer Hub (`/transfer`):**
-    * **Tab 1: Direct Transfer:** Input Wallet Address -> Send XLM.
-    * **Tab 2: Geo-Drop (The Killer Feature):**
-        * Select Location (Current GPS or Pick on Map).
-        * **Settings:** Amount, Message, *Target Audience* (e.g., "Only for my friends" or "Public"), *Expiration Time*.
-    * **UX:** Use a stepper for the Drop creation (Step 1: Location -> Step 2: Details -> Step 3: Sign).
+* **D. Map View:**
+    * Full-screen map (dark custom theme map style) showing nearby Drops.
+    * Filter drops by type (Company promo, User gift, etc.).
 
-5.  **Transactions History (`/history`):**
-    * Visual difference between "Direct Sent" and "Drop Claimed".
-    * List who claimed your drops.
+* **E. New Transfer Page (The Core Feature):**
+    * **Tab 1: Direct Transfer:** Input wallet address or select from recent contacts.
+    * **Tab 2: Geo-Drop (The Star):** * Select location on map.
+        * Input Amount & Message.
+        * **Advanced Settings:** "Who can claim?" (Public, Friends Only), "Expiry Date", "Target Audience" (e.g., 'Only for students' - mock logic).
 
-6.  **Leaderboard (`/leaderboard`):**
-    * "Top Droppers" and "Top Hunters". Gamification elements.
+* **F. Transaction History:**
+    * Two distinct lists: "Direct Transfers" and "Geo-Claims".
 
-7.  **Wallet Connection:**
-    * Do NOT just use a raw browser alert.
-    * Create a custom UI Component `WalletConnectModal`.
-    * It should explain "Connect to Stellar" and gracefully handle the `@stellar/freighter-api` connection. If the extension is missing, show a beautiful "Install Wallet" guide instead of breaking.
+* **G. Profile:**
+    * Edit username, bio, view badges (e.g., "Top Dropper").
 
-**TECH STACK:**
-* **Framework:** Next.js 14+ (App Router).
-* **Styling:** Tailwind CSS + `framer-motion` (for all micro-interactions, hover states, page loads).
-* **Icons:** `lucide-react`.
+**3. TECHNICAL TASKS:**
+* **Clean Code:** Modularize components (Cards, Modals, Buttons).
+* **Theme Config:** Create a `theme.config.ts` exporting color tokens and radius settings.
+* **Documentation:** DELETE all old `.md` files. Create 4 new ones:
+    1.  `INSTALL.md`: Setup instructions.
+    2.  `RUN.md`: Dev server & build.
+    3.  `DEPLOY.md`: Vercel + Stellar Network deployment steps.
+    4.  `README.md`: The main professional project brief.
 
-**DELIVERABLES:**
-1.  **Refactored Folder Structure:** `src/app`, `src/components` (Atoms, Molecules), `src/hooks`.
-2.  **Global `layout.tsx`:** Handling the responsive Navbars and Theme Provider.
-3.  **Components:** Reusable Cards, Buttons, Inputs with consistent spacing/radius.
-4.  **Docs:** DELETE old MD files. Create:
-    * `INSTALL.md`: How to install dependencies.
-    * `RUN.md`: How to run dev server.
-    * `DEPLOY.md`: How to deploy to Vercel + Stellar Testnet info.
-    * `README.md`: The main project overview.
-
-**DESIGN SYSTEM TOKENS:**
-* Primary: `#10B981` (Emerald-500)
-* Secondary: `#064E3B` (Emerald-900)
-* Accent: `#34D399` (Emerald-400)
-* Background: `#020617` (Slate-950) with radial gradients.
-
-Start by defining the file structure and the main `layout.tsx` with the responsive navigation logic.
+**Deliverables:**
+* Analyze existing code.
+* Propose the new folder structure.
+* Provide the code for the new `Layout`, `Theme`, `WalletModal`, and the `Onboarding` flow first.
+* Ensure the design is "Hackathon Winner" quality—visually stunning, not generic.

@@ -1,13 +1,15 @@
 import type { Metadata } from 'next';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import FullscreenButton from '@/components/FullscreenButton';
+import { WalletProvider } from '@/contexts/WalletContext';
+import AnimatedBackground from '@/components/AnimatedBackground';
+import DesktopNavbar from '@/components/navigation/DesktopNavbar';
+import MobileTabBar from '@/components/navigation/MobileTabBar';
 
 export const metadata: Metadata = {
-  title: 'StellarGo - Location-Based Crypto Platform',
-  description: 'Drop crypto at physical locations for others to discover and claim on the Stellar Network',
+  title: 'StellarGo - Crypto on the Streets',
+  description: 'Location-Based SocialFi Platform. Drop crypto at physical locations for others to discover and claim on the Stellar Network',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
-  themeColor: '#0284c7',
+  themeColor: '#00FF41',
 };
 
 export default function RootLayout({
@@ -25,12 +27,15 @@ export default function RootLayout({
           crossOrigin=""
         />
       </head>
-      <body className="min-h-screen bg-accent-50">
-        <Navbar />
-        <main className="min-h-[calc(100vh-4rem)]">
-          {children}
-        </main>
-        <FullscreenButton />
+      <body className="min-h-screen bg-dark-900 text-gray-100">
+        <WalletProvider>
+          <AnimatedBackground />
+          <DesktopNavbar />
+          <MobileTabBar />
+          <main className="min-h-screen pt-24 md:pt-28 pb-24 md:pb-8 px-4">
+            {children}
+          </main>
+        </WalletProvider>
       </body>
     </html>
   );

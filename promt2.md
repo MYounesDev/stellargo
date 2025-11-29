@@ -1,37 +1,32 @@
-**ACT AS:** Creative Director & Frontend Developer.
+**Act as a Creative Developer and Storyteller.**
 
-**TASK:** Integrate a "Presentation Mode" directly into the Next.js application created in the previous step.
-**ROUTE:** `/presentation`
+I want to build my Hackathon Presentation **directly inside my Next.js app** as a web page, instead of using PowerPoint.
+Create a new route: `/src/app/presentation/page.tsx`.
 
-**REQUIREMENTS:**
+**1. PRESENTATION ENGINE:**
+* It should behave like a slide deck.
+* **Navigation:** Arrow keys (Left/Right) and on-screen "Next/Prev" buttons.
+* **Layout:** Full screen, immersive, distinct from the main app layout (hide the standard navbar).
+* **Animations:** Use `framer-motion`. Slides should slide in/out or fade smoothly. Text should stagger in.
 
-1.  **The Engine:**
-    * Build a slide-deck engine using React state and `framer-motion`.
-    * **Navigation:** Arrow keys (Left/Right) support, Click to advance, and on-screen "Next/Prev" buttons.
-    * **Transitions:** Slides should "slide in" or "fade scale" with high-quality easing.
+**2. CONTENT & SLIDES (English Language):**
+Based on the project notes, create the following slides with rich visuals (mock graphs, icons, big typography):
 
-2.  **Design Style:**
-    * Fullscreen experience.
-    * **Visuals:** Big typography, heavy use of the "Green/Cyber" theme, animated charts (use simple CSS or SVG animations for charts).
-    * **Layout:** Split screens (Text Left / Image Right), Big Centered Statements.
+* **Slide 1: Title & Hook:** "StellarGo: Not just a tool. A Platform." (Animated background).
+* **Slide 2: The Problem:** "Crypto is lonely. It's stuck on screens." (Visual: A sad/boring wallet interface).
+* **Slide 3: The Solution (Geo-Drop):** "We bring Crypto to the Streets." (Visual: Map icon with a glowing drop).
+* **Slide 4: Why Stellar? (Crucial):** * Graph showing Cost comparison: Ethereum ($5.00) vs Stellar ($0.00001).
+    * Text: "Gamification requires Speed (3s) and Low Cost. Only Stellar makes this business model viable."
+* **Slide 5: Business Model & Validation:**
+    * Market Position: "Location-Based SocialFi".
+    * Use Case: "Starbucks drops tokens in-store to drive foot traffic."
+* **Slide 6: Smart Contracts:** Briefly explain the Soroban logic (Lat/Long verification).
+* **Slide 7: Tech Stack:** Next.js + Tailwind + Soroban + Freighter + MongoDB.
+* **Slide 8: Demo & QR:** Large QR Code to open the app on mobile.
 
-3.  **Slide Content (Strictly Follow This Flow):**
-    * **Slide 1 (Intro):** "StellarGo". Big bold text: "It's not a tool. It's a Platform." (Animated entrance).
-    * **Slide 2 (The Problem):** "Crypto is Lonely." Show icons of isolated people on phones.
-    * **Slide 3 (The Solution):** "We bring Crypto to the Streets." Icon: GPS Pin + Dollar Sign.
-    * **Slide 4 (Why Stellar? - CRITICAL):**
-        * Animate a comparison graph: "Ethereum Cost: $5.00" vs "Stellar Cost: $0.00001".
-        * Text: "Speed: 3 Seconds Finality."
-        * "Why we win: Micro-transactions are only possible here."
-    * **Slide 5 (Business Model):**
-        * "B2B: Companies drop tokens to drive foot traffic."
-        * "Non-Profits: Event-based fundraising."
-    * **Slide 6 (Tech Stack):** Next.js, Stellar, Soroban, MongoDB.
-    * **Slide 7 (Demo & QR):** "Scan to Play". Button: "Launch Live Demo" (Links to `/`).
+**3. DESIGN STYLE:**
+* Use the same "Dark/Neon Green" aesthetic as the main app but even bolder.
+* Include a "Presenter Mode" feature: A small toggle to show speaker notes (optional).
 
-4.  **Implementation:**
-    * Create a `PresentationLayout` component.
-    * Use an array of objects for slide data to make it easy to edit text later.
-    * Ensure animations trigger *every time* a slide changes (use `AnimatePresence`).
-
-Please generate the code for the `/presentation/page.tsx` and the necessary components.
+**Task:**
+Write the code for this Presentation component. Use an array of objects for the slide data so I can easily edit the text later. Ensure the `AnimatePresence` is used for smooth slide transitions.

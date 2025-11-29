@@ -1,376 +1,369 @@
-# StellarGo 🌍💰
+# StellarGo 🚀
 
-**A location-based cryptocurrency platform built on the Stellar Network**
-
-Drop crypto at physical locations for others to discover and claim - like a real-world treasure hunt powered by blockchain!
+## Crypto on the Streets - Location-Based SocialFi Platform
 
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
-[![Stellar](https://img.shields.io/badge/Stellar-Network-purple)](https://stellar.org/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Stellar](https://img.shields.io/badge/Stellar-Soroban-purple)](https://stellar.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
+
+StellarGo is not just a tool—it's a **platform** that brings cryptocurrency to the physical world. Drop crypto at real locations for others to discover and claim, turning your city into an interactive treasure hunt powered by the Stellar blockchain.
 
 ---
 
-## ✨ Features
+## 🌟 The Vision
 
-### 🗺️ Core Features
-- **Geo-Drop Creation**: Drop crypto at any GPS location with a message
-- **Interactive Map**: Leaflet-powered map showing all drops in real-time
-- **Proximity Claiming**: Claim drops only when within 50 meters
-- **Wallet Integration**: Secure Freighter wallet connection
-- **Real-time Balance**: Live XLM balance display
+**The Problem:** Crypto is lonely. It's stuck on screens in boring wallet interfaces with no real-world connection.
 
-### 🎨 User Experience
-- **Modern FinTech Design**: Clean, professional aesthetic (Stripe/Revolut inspired)
-- **Fully Responsive**: Optimized for mobile, tablet, and desktop
-- **Mobile Fullscreen**: App-like experience on mobile devices
-- **Smooth Animations**: Polished interactions throughout
-- **Dark/Light UI**: High contrast, accessible design
+**The Solution:** We bring crypto to the streets through location-based drops, creating a new category of **Location-Based SocialFi**.
 
-### 🤖 Additional Features
-- **AI Trading Assistant**: Mock AI chatbot for token analysis
-- **Comprehensive FAQ**: Detailed Q&A covering all aspects
-- **Dashboard Analytics**: Track drops, claims, and statistics
-- **Smart Contracts**: Soroban contracts for secure transactions
+---
+
+## ✨ Key Features
+
+### 🗺️ Geo-Drops
+- Drop crypto at physical locations
+- Set custom messages and requirements
+- Configure who can claim (public, friends, students)
+- Set expiry dates for time-limited drops
+
+### 📍 Interactive Map
+- Dark-themed custom map interface
+- Real-time drop visualization
+- Filter drops by type and status
+- Claim drops within 50m radius
+
+### 🎯 Gamification
+- Achievement badges system
+- User leaderboards
+- Activity tracking
+- Profile customization
+
+### 💸 Dual Transfer System
+- **Geo-Drop**: Location-based crypto drops
+- **Direct Transfer**: Traditional wallet-to-wallet
+
+### 🏢 Multi-User Types
+- **Personal Users**: Hunt for drops while exploring
+- **Companies**: Drive foot traffic with marketing campaigns
+- **Non-Profits**: Engage communities with event-based distribution
+
+---
+
+## 🔥 Why Stellar?
+
+This business model is **ONLY** viable on Stellar:
+
+| Feature | Ethereum | Stellar |
+|---------|----------|---------|
+| Transaction Cost | $5.00 | $0.00001 |
+| Confirmation Time | 15-60s | 3-5s |
+| Scalability | Limited | High |
+| Gamification Viable? | ❌ | ✅ |
+
+**Gamification requires speed (3s) and low cost. Only Stellar makes this possible.**
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Next.js 14** - React framework with App Router
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Framer Motion** - Smooth animations
+
+### Blockchain
+- **Stellar Network** - Fast, low-cost transactions
+- **Soroban** - Smart contracts for geo-verification
+- **Freighter Wallet** - Stellar wallet integration
+
+### Backend
+- **MongoDB** - NoSQL database
+- **Next.js API Routes** - Serverless functions
+- **Mongoose** - ODM for MongoDB
+
+### Mapping
+- **Leaflet** - Interactive maps
+- **React Leaflet** - React integration
 
 ---
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- MongoDB (local or Atlas)
-- Freighter Wallet
+- Node.js v18+
+- MongoDB
+- Freighter Wallet extension
 
 ### Installation
 
 ```bash
-# 1. Clone and install
+# Clone repository
 git clone https://github.com/yourusername/stellargo.git
 cd stellargo
+
+# Install dependencies
 npm install
 
-# 2. Setup environment
-cp .env.example .env
-# Edit .env with your MongoDB URI and Stellar wallet
+# Set up environment
+cp .env.example .env.local
+# Edit .env.local with your configuration
 
-# 3. Seed database
-npm run seed
-
-# 4. Run development server
+# Run development server
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the app.
+Visit [http://localhost:3000](http://localhost:3000) to see the app.
 
-**📚 For detailed setup:** See [QUICKSTART.md](QUICKSTART.md) or [SETUP.md](SETUP.md)
-
----
-
-## 🛠️ Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Frontend** | Next.js 14, React 18, TypeScript 5 |
-| **Styling** | Tailwind CSS 3, Custom Design System |
-| **Maps** | Leaflet, React-Leaflet |
-| **Backend** | Next.js API Routes, Node.js |
-| **Database** | MongoDB, Mongoose (with geospatial indexes) |
-| **Blockchain** | Stellar Network (Testnet), Stellar SDK |
-| **Wallet** | Freighter API |
-| **Smart Contracts** | Soroban (Rust) |
-| **Deployment** | Vercel, MongoDB Atlas |
+📚 **Detailed guides:**
+- [Installation Guide](./INSTALL.md)
+- [Running the App](./RUN.md)
+- [Deployment Guide](./DEPLOY.md)
 
 ---
 
-## 📸 Screenshots
+## 📱 Screenshots
+
+### Landing Page
+High-energy hero with animated elements, leaderboard, and Q&A.
 
 ### Dashboard
-![Dashboard with interactive map showing drops]
+Overview of balance, active drops, and recent activity.
 
-### Create Drop
-![Modal for creating a new geo-drop]
+### Map View
+Full-screen dark-themed map showing nearby drops with filters.
 
-### AI Trader
-![AI trading assistant interface]
+### Geo-Drop Creation
+Interactive map selection with advanced settings.
 
-### Mobile View
-![Responsive mobile design with fullscreen mode]
+### Profile
+Customizable profile with achievement badges.
 
 ---
 
-## 📁 Project Structure
+## 🎨 Design Philosophy
+
+### Dark/Neon Green Aesthetic
+- Deep blacks/grays for background
+- Neon Green (#00FF41) for primary actions
+- Glassmorphism for modern UI
+- Animated background with moving blobs
+
+### Responsive Design
+- **Desktop**: Floating glass navbar at top
+- **Mobile**: Glass tab bar at bottom
+- Smooth animations everywhere
+- "Hackathon Winner" quality visuals
+
+---
+
+## 🔐 Smart Contracts
+
+### Geo-Drop Contract (Soroban)
+
+```rust
+fn create_drop(lat: i64, lng: i64, amount: i128)
+fn claim_drop(user_lat: i64, user_lng: i64)
+// Verifies user is within 50m radius before allowing claim
+```
+
+**Key Features:**
+- Latitude/Longitude verification
+- Radius-based claiming
+- Secure fund escrow
+- Anti-double-claim protection
+
+---
+
+## 🎯 Use Cases
+
+### 1. Company Marketing
+**Starbucks** drops 5 XLM tokens at each location. Users can claim when they visit, driving foot traffic and creating buzz.
+
+### 2. Event Engagement
+**Music Festival** organizers drop tokens at specific stages. Attendees collect them as they explore the venue.
+
+### 3. Educational Rewards
+**Universities** drop tokens for students attending lectures or visiting campus locations.
+
+### 4. Social Treasure Hunts
+**Friends** create scavenger hunts by dropping crypto at significant locations.
+
+### 5. Tourism Incentives
+**Cities** promote tourism by placing drops at historical landmarks.
+
+---
+
+## 📊 Project Structure
 
 ```
 stellargo/
 ├── src/
-│   ├── app/                        # Next.js App Router
-│   │   ├── page.tsx               # Dashboard (main page)
-│   │   ├── layout.tsx             # Root layout
-│   │   ├── globals.css            # Global styles
-│   │   ├── api/drops/             # REST API endpoints
-│   │   ├── ai-trader/             # AI trading UI
-│   │   └── faq/                   # FAQ page
-│   ├── components/                # Reusable components
-│   │   ├── Button.tsx
-│   │   ├── Card.tsx
-│   │   ├── Modal.tsx
-│   │   ├── DropModal.tsx
-│   │   ├── MapView.tsx
-│   │   ├── Navbar.tsx
-│   │   └── FullscreenButton.tsx
-│   ├── lib/                       # Utilities
-│   │   ├── mongodb.ts
-│   │   ├── stellar.ts
-│   │   └── freighter.ts
-│   ├── models/                    # Database schemas
-│   │   └── Drop.ts
-│   └── types/                     # TypeScript definitions
-│       └── index.ts
-├── soroban/                       # Smart contracts
-│   └── geo_drop/
-│       ├── src/lib.rs
-│       └── Cargo.toml
-├── scripts/
-│   └── seed.js                    # Database seeding
-├── public/                        # Static assets
-└── Documentation/                 # 8 comprehensive guides
-    ├── README.md
-    ├── QUICKSTART.md
-    ├── SETUP.md
-    ├── DEPLOYMENT.md
-    ├── HACKATHON_DEMO.md
-    ├── PROJECT_STRUCTURE.md
-    ├── CONTRIBUTING.md
-    └── PROJECT_SUMMARY.md
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── (home)/            # Landing page
+│   │   ├── dashboard/         # Main dashboard
+│   │   ├── map/               # Map view
+│   │   ├── transfer/          # Create drops/transfers
+│   │   ├── history/           # Transaction history
+│   │   ├── profile/           # User profile
+│   │   └── presentation/      # Hackathon presentation
+│   ├── components/            # React components
+│   │   ├── ui/                # Reusable UI components
+│   │   ├── navigation/        # Nav components
+│   │   └── ...
+│   ├── contexts/              # React contexts
+│   ├── lib/                   # Utilities and configs
+│   └── types/                 # TypeScript types
+├── soroban/                   # Smart contracts
+│   └── geo_drop/              # Geo-drop contract
+├── public/                    # Static assets
+└── docs/                      # Documentation
 ```
-
-**Total:** 25+ source files, 7 components, 3 pages, 3 API routes, 8 documentation files
-
-## 🎯 How It Works
-
-### Creating a Drop
-1. 🔗 **Connect** your Freighter wallet
-2. 🗺️ **Click** any location on the map (or "Drop Here")
-3. 💰 **Enter** amount (XLM) and a message
-4. ✅ **Submit** - Drop created instantly
-5. 📍 **Appears** on map for others to find
-
-### Claiming a Drop
-1. 👀 **See** drops on the map as blue markers
-2. 🚶 **Walk** within 50 meters of a drop
-3. 🔵 **Click** the now-active "Claim" button
-4. 💸 **Receive** XLM transferred to your wallet
-5. ✨ **Success** - Drop marked as claimed
-
-### Security & Verification
-- **Location**: Server-side proximity verification (50m radius)
-- **Wallet**: Private keys never leave your device (Freighter)
-- **Transactions**: All signed client-side
-- **Blockchain**: Immutable record on Stellar Network
-
-## 📚 Documentation
-
-We've created **8 comprehensive guides** to help you:
-
-| Document | Description |
-|----------|-------------|
-| 📖 [QUICKSTART.md](QUICKSTART.md) | Get running in 5 minutes |
-| 🔧 [SETUP.md](SETUP.md) | Detailed setup instructions |
-| 🚀 [DEPLOYMENT.md](DEPLOYMENT.md) | Deploy to production (Vercel) |
-| 🎤 [HACKATHON_DEMO.md](HACKATHON_DEMO.md) | 5-minute demo script & tips |
-| 🏗️ [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) | Architecture deep dive |
-| 🤝 [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
-| 📊 [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) | Complete project overview |
-| ❓ **FAQ in app** | User-facing Q&A |
 
 ---
 
-## 🧪 Development Commands
+## 🔧 Configuration
+
+### Environment Variables
+
+```env
+# MongoDB
+MONGODB_URI=mongodb://localhost:27017/stellargo
+
+# Stellar
+STELLAR_NETWORK=TESTNET
+STELLAR_HORIZON_URL=https://horizon-testnet.stellar.org
+
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
+
+### Theme Configuration
+
+Edit `src/lib/theme.config.ts` to customize:
+- Colors
+- Gradients
+- Shadows
+- Animations
+- Spacing
+
+---
+
+## 🎬 Presentation Mode
+
+Access the built-in presentation at `/presentation`:
+
+- Navigate with arrow keys (Left/Right)
+- Press 'N' for speaker notes
+- Full-screen immersive slides
+- QR code for mobile demo
+
+Perfect for hackathon pitches!
+
+---
+
+## 🧪 Testing
 
 ```bash
-npm run dev      # Start development server (localhost:3000)
-npm run build    # Build for production
-npm run start    # Start production server
-npm run seed     # Seed database with 30 test drops
-npm run lint     # Check code quality
+# Run linter
+npm run lint
+
+# Seed database with sample data
+npm run seed
+
+# Build for production
+npm run build
 ```
 
 ---
 
-## 🌐 API Endpoints
+## 📈 Roadmap
 
-### Drops API
+### Phase 1: MVP (Current)
+- [x] Basic geo-drop functionality
+- [x] Map visualization
+- [x] Wallet integration
+- [x] User profiles
+- [x] Transaction history
 
-**GET /api/drops**
-- Fetch all drops or drops near a location
-- Query params: `latitude`, `longitude`, `radius`
-
-**POST /api/drops**
-- Create a new drop
-- Body: `latitude`, `longitude`, `amount`, `message`, `createdBy`
-
-**POST /api/drops/[id]/claim**
-- Claim a drop
-- Body: `userPublicKey`, `userLatitude`, `userLongitude`
-
----
-
-## 🎨 Design System
-
-**Color Palette:**
-- Primary Blue: `#0284c7` (Actions, emphasis)
-- Accent Gray: `#f4f4f5` - `#18181b` (Text, backgrounds)
-- Semantic: Green (success), Red (error), Yellow (warning)
-
-**Typography:**
-- Font: Inter (Google Fonts)
-- Sizes: Responsive scale (mobile-optimized)
-
-**Components:**
-- Button: 4 variants × 3 sizes
-- Card: Hover effects, flexible padding
-- Modal: Responsive, backdrop blur
-
----
-
-## 🔐 Security
-
-### Implemented
-✅ Private keys never exposed
-✅ Client-side transaction signing
-✅ Environment variables for secrets
-✅ Input validation
-✅ Proximity verification
-✅ MongoDB injection prevention
-
-### For Production
-- [ ] Rate limiting
-- [ ] CAPTCHA for claims
-- [ ] Smart contract audit
-- [ ] Error monitoring (Sentry)
-- [ ] Database backups
-
----
-
-## 🚀 Deployment
-
-### Quick Deploy to Vercel
-
-```bash
-npm i -g vercel
-vercel --prod
-```
-
-Add environment variables in Vercel dashboard:
-- `MONGODB_URI`
-- `NEXT_PUBLIC_STELLAR_NETWORK`
-- `NEXT_PUBLIC_HOLDING_WALLET_ADDRESS`
-- `HOLDING_WALLET_SECRET`
-
-**Full guide:** [DEPLOYMENT.md](DEPLOYMENT.md)
-
----
-
-## 🌟 Why Stellar?
-
-- ⚡ **Fast**: 5-second transaction finality
-- 💰 **Cheap**: ~$0.00001 per transaction
-- 🌍 **Global**: Cross-border by design
-- 🔒 **Secure**: Proven consensus protocol
-- 🏦 **DEX**: Built-in decentralized exchange
-- 🌱 **Eco-Friendly**: Minimal energy consumption
-
-Perfect for micro-transactions and real-world use cases like StellarGo!
-
----
-
-## 💡 Use Cases
-
-🎉 **Events** - Drop crypto at conferences for attendees
-☕ **Tipping** - Leave tips at local businesses
-🏙️ **Tourism** - City-wide scavenger hunts
-🎓 **Education** - Campus treasure hunts
-🏪 **Retail** - Location-based loyalty rewards
-🎮 **Gaming** - Real-world crypto games
-
----
-
-## 🗺️ Roadmap
-
-### Phase 1 (Current - MVP)
-- ✅ Core features complete
-- ✅ Smart contracts deployed
-- ✅ Testnet functional
-
-### Phase 2 (Next)
-- [ ] Security audit
-- [ ] Mainnet deployment
-- [ ] Mobile apps (iOS/Android)
-- [ ] Social features
-
-### Phase 3 (Future)
-- [ ] NFT drops
+### Phase 2: Enhancement
+- [ ] Social features (friends, messaging)
+- [ ] Advanced filters and search
+- [ ] Mobile native apps
+- [ ] Real-time notifications
 - [ ] Multi-token support
-- [ ] Merchant integrations
-- [ ] Analytics dashboard
+
+### Phase 3: Scale
+- [ ] Mainnet deployment
+- [ ] Business dashboard
+- [ ] Analytics platform
+- [ ] API for third parties
+- [ ] Multi-language support
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Coding standards
-- Git workflow
-- PR process
-- Testing guidelines
+We welcome contributions! Please:
 
----
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
 
-## 📞 Support
-
-- 📖 **Documentation**: Check our comprehensive guides
-- 💬 **Issues**: [GitHub Issues](https://github.com/yourusername/stellargo/issues)
-- 🌟 **Stellar Discord**: Join the community
-- ❓ **FAQ**: In-app FAQ page
-
----
-
-## 🙏 Acknowledgments
-
-Built with amazing tools:
-- [Stellar Development Foundation](https://stellar.org)
-- [Freighter Wallet](https://freighter.app)
-- [Next.js](https://nextjs.org) by Vercel
-- [MongoDB](https://mongodb.com)
-- [Leaflet](https://leafletjs.com)
-- [OpenStreetMap](https://openstreetmap.org)
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 ---
 
 ## 📄 License
 
-MIT License - See [LICENSE](LICENSE) for details
-
-Built for hackathon purposes, ready for production! 🚀
+This project is licensed under the MIT License - see [LICENSE](./LICENSE) for details.
 
 ---
 
-## 🌐 Links
+## 👥 Team
 
-- 🌍 **Live Demo**: [stellargo.vercel.app](https://stellargo.vercel.app)
-- 💻 **GitHub**: [github.com/yourusername/stellargo](https://github.com/yourusername/stellargo)
-- 📱 **Stellar**: [stellar.org](https://stellar.org)
-- 🔗 **Soroban**: [soroban.stellar.org](https://soroban.stellar.org)
+Built with ❤️ by developers passionate about bringing crypto to the real world.
+
+---
+
+## 🔗 Links
+
+- **Website**: [stellargo.app](https://stellargo.app)
+- **Documentation**: [docs.stellargo.app](https://docs.stellargo.app)
+- **GitHub**: [github.com/stellargo](https://github.com/stellargo)
+- **Twitter**: [@StellarGo](https://twitter.com/stellargo)
+- **Discord**: [Join our community](https://discord.gg/stellargo)
+
+---
+
+## 🙏 Acknowledgments
+
+- **Stellar Development Foundation** for the amazing blockchain
+- **Soroban Team** for smart contract capabilities
+- **Freighter** for wallet integration
+- **Vercel** for hosting platform
+- **Next.js Team** for the framework
+
+---
+
+## 💬 Support
+
+- 📧 Email: support@stellargo.app
+- 💬 Discord: [Join our server](https://discord.gg/stellargo)
+- 🐦 Twitter: [@StellarGo](https://twitter.com/stellargo)
+- 📖 Docs: [docs.stellargo.app](https://docs.stellargo.app)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ for the Stellar Network**
+**StellarGo** - Crypto on the Streets 🚀
 
-⭐ Star this repo if you find it helpful!
+Bringing blockchain to the physical world, one drop at a time.
 
-[Report Bug](https://github.com/yourusername/stellargo/issues) · [Request Feature](https://github.com/yourusername/stellargo/issues) · [Documentation](QUICKSTART.md)
+[Get Started](./INSTALL.md) • [View Demo](https://stellargo.app) • [Join Community](https://discord.gg/stellargo)
 
 </div>

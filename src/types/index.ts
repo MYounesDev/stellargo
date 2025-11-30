@@ -13,6 +13,25 @@ export interface Drop {
   transactionHash?: string;
   createdAt: Date;
   updatedAt: Date;
+  // New fields
+  targetAudience?: 'public' | 'friends' | 'customers';
+  expiresAt?: Date;
+}
+
+export interface User {
+  _id?: string;
+  publicKey: string;
+  username?: string;
+  bio?: string;
+  persona: 'personal' | 'business' | 'nonprofit';
+  badge?: string;
+  level: number;
+  createdAt: Date;
+  updatedAt: Date;
+  totalDropsCreated: number;
+  totalDropsClaimed: number;
+  totalAmountSent: number;
+  totalAmountReceived: number;
 }
 
 export interface UserLocation {
@@ -31,6 +50,8 @@ export interface DropFormData {
   message: string;
   latitude: number;
   longitude: number;
+  targetAudience?: 'public' | 'friends' | 'customers';
+  expiresAt?: Date;
 }
 
 export interface ClaimDropPayload {
@@ -44,5 +65,16 @@ export interface ApiResponse<T = any> {
   data?: T;
   error?: string;
   message?: string;
+}
+
+export interface Transaction {
+  _id?: string;
+  type: 'direct' | 'drop_placed' | 'drop_claimed';
+  from: string;
+  to?: string;
+  amount: number;
+  dropId?: string;
+  transactionHash?: string;
+  createdAt: Date;
 }
 

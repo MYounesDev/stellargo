@@ -24,8 +24,15 @@ export async function getAccountBalance(publicKey: string): Promise<string> {
       (balance) => balance.asset_type === 'native'
     );
     return xlmBalance ? xlmBalance.balance : '0';
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching balance:', error);
+    
+    // If account doesn't exist (404), return 0 instead of throwing
+    if (error?.response?.status === 404) {
+      console.warn('⚠️ Account not found on network. Account may need to be funded first.');
+      return '0';
+    }
+    
     return '0';
   }
 }

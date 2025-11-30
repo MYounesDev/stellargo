@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 import DropModel from '@/models/Drop';
 import { ApiResponse, Drop } from '@/types';
 import { isWithinRange } from '@/lib/stellar';
@@ -9,7 +9,7 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
-    await dbConnect();
+    await connectToDatabase();
 
     const body = await request.json();
     const { userPublicKey, userLatitude, userLongitude, transactionHash } = body;

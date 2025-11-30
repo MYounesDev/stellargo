@@ -1,7 +1,9 @@
+
 import React from 'react';
+import { Loader2 } from 'lucide-react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   children: React.ReactNode;
@@ -17,23 +19,25 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-dark-500 disabled:opacity-50 disabled:cursor-not-allowed btn-hover relative';
 
   const variants = {
     primary:
-      'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 shadow-sm hover:shadow-md',
+      'bg-gradient-to-r from-cyber-500 to-cyan-500 text-dark-950 hover:from-cyber-600 hover:to-cyan-600 focus:ring-cyber-500 shadow-lg hover:shadow-cyber-500/50 hover:scale-105 font-bold',
     secondary:
-      'bg-accent-100 text-accent-900 hover:bg-accent-200 focus:ring-accent-500',
+      'bg-cyber-700 text-white hover:bg-cyber-600 focus:ring-cyber-500 border border-cyber-600',
     outline:
-      'border-2 border-primary-600 text-primary-600 hover:bg-primary-50 focus:ring-primary-500',
+      'bg-dark-900/80 border-2 border-cyber-500 text-cyber-500 hover:bg-dark-800/60 focus:ring-cyber-500 hover:text-cyber-400',
     danger:
-      'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-sm hover:shadow-md',
+      'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 shadow-lg hover:shadow-red-500/50',
+    ghost:
+      'bg-dark-800/60 text-cyber-400 hover:text-white hover:bg-dark-700/80',
   };
 
   const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-5 py-2.5 text-base',
-    lg: 'px-6 py-3 text-lg',
+    sm: 'px-4 py-2 text-sm',
+    md: 'px-6 py-3 text-base',
+    lg: 'px-8 py-4 text-lg',
   };
 
   return (
@@ -44,27 +48,8 @@ const Button: React.FC<ButtonProps> = ({
     >
       {loading ? (
         <>
-          <svg
-            className="animate-spin -ml-1 mr-2 h-4 w-4"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-          Loading...
+          <Loader2 className="animate-spin -ml-1 mr-2 h-4 w-4" />
+          <span>Loading...</span>
         </>
       ) : (
         children

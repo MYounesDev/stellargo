@@ -1,235 +1,192 @@
-import React from 'react';
-import Card from '@/components/Card';
+'use client';
 
-const FAQPage: React.FC = () => {
-  const faqs = [
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Card from '@/components/Card';
+import { ChevronDown, HelpCircle, Sparkles } from 'lucide-react';
+
+interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export default function FAQPage() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const faqs: FAQItem[] = [
     {
-      category: 'Getting Started',
-      questions: [
-        {
-          q: 'What is StellarGo?',
-          a: 'StellarGo is a location-based cryptocurrency platform built on the Stellar Network. It allows users to "drop" crypto at physical locations for others to discover and claim, creating a real-world treasure hunt experience with digital assets.',
-        },
-        {
-          q: 'How do I start using StellarGo?',
-          a: 'Simply connect your Freighter wallet, enable location services, and you\'re ready! You can start dropping crypto at any location or search the map for nearby drops to claim.',
-        },
-        {
-          q: 'Do I need cryptocurrency to use StellarGo?',
-          a: 'Yes, you need XLM (Stellar Lumens) in your Freighter wallet to create drops. However, you can claim drops without any initial investment. Get free testnet XLM from the Stellar Friendbot for testing.',
-        },
-      ],
+      question: 'What is StellarGo?',
+      answer: 'StellarGo is a location-based SocialFi platform built on the Stellar Network. It allows users to "drop" cryptocurrency at physical locations for others to discover and claim. Think of it as a digital treasure hunt combined with instant crypto transfers.'
     },
     {
-      category: 'Why Stellar?',
-      questions: [
-        {
-          q: 'Why did we choose the Stellar Network?',
-          a: 'Stellar offers lightning-fast transactions (~5 seconds), extremely low fees (~$0.00001), and built-in DEX functionality. It\'s perfect for micro-transactions and real-world use cases like StellarGo.',
-        },
-        {
-          q: 'What are the benefits of Stellar over other blockchains?',
-          a: 'Stellar provides instant finality, minimal environmental impact, and is specifically designed for payments and asset transfers. Unlike Ethereum, you don\'t need to worry about gas fees eating into small transactions.',
-        },
-        {
-          q: 'Is Stellar secure?',
-          a: 'Yes! Stellar uses the Stellar Consensus Protocol (SCP), which is proven to be secure and efficient. The network has been operational since 2014 with no major security incidents.',
-        },
-      ],
+      question: 'How does Geo-Drop work?',
+      answer: 'Geo-Drops are cryptocurrency amounts placed at specific GPS coordinates. When you create a drop, you set the location, amount, and message. Anyone within 50 meters of that location can claim the drop using their mobile device. The claim radius ensures drops are physically collected.'
     },
     {
-      category: 'How to Play',
-      questions: [
-        {
-          q: 'How do I create a Geo-Drop?',
-          a: 'Connect your wallet, click any location on the map (or use "Drop Here" for your current location), enter the amount of XLM and a message, then confirm. The crypto will be locked at that location for others to find!',
-        },
-        {
-          q: 'How close do I need to be to claim a drop?',
-          a: 'You must be within 50 meters (approximately 164 feet) of a drop to claim it. This ensures you\'re actually at the physical location and prevents remote claiming.',
-        },
-        {
-          q: 'Can I see all drops on the map?',
-          a: 'Yes! All active (unclaimed) drops are visible on the map as blue markers with a dollar sign. Tap any marker to see the amount, message, and claim button if you\'re in range.',
-        },
-        {
-          q: 'What happens to unclaimed drops?',
-          a: 'Currently, drops remain active indefinitely until claimed. Future versions may include expiration times where unclaimed funds return to the creator.',
-        },
-      ],
+      question: 'Why is the Stellar Network used?',
+      answer: 'Stellar offers several key advantages: transactions confirm in 3-5 seconds (much faster than Bitcoin or Ethereum), transaction fees are under $0.01, it\'s energy-efficient without mining, and it\'s specifically designed for fast, low-cost payments - perfect for our use case.'
     },
     {
-      category: 'Security & Privacy',
-      questions: [
-        {
-          q: 'Is my wallet safe?',
-          a: 'Absolutely! StellarGo uses Freighter wallet, which means your private keys never leave your device. We only request your public key for transactions, which you must approve individually.',
-        },
-        {
-          q: 'What location data do you store?',
-          a: 'We only store the coordinates of drops you create and your location when claiming (to verify proximity). We never track your movements or store historical location data.',
-        },
-        {
-          q: 'Can someone steal my drop?',
-          a: 'Drops can only be claimed by users physically present at the location (within 50m). The blockchain ensures all transactions are immutable and transparent.',
-        },
-        {
-          q: 'What if I lose access to my wallet?',
-          a: 'Always backup your Freighter wallet recovery phrase! If you lose access and haven\'t backed up your phrase, your funds cannot be recovered. This is a fundamental principle of blockchain technology.',
-        },
-      ],
+      question: 'What is Freighter Wallet?',
+      answer: 'Freighter is a browser extension wallet for the Stellar Network, similar to MetaMask for Ethereum. It\'s required to use StellarGo as it manages your Stellar account and signs transactions. You can download it from freighter.app.'
     },
     {
-      category: 'Technical Details',
-      questions: [
-        {
-          q: 'Is this on mainnet or testnet?',
-          a: 'StellarGo is currently deployed on Stellar Testnet for hackathon and demonstration purposes. Before mainnet launch, we\'ll conduct thorough security audits and testing.',
-        },
-        {
-          q: 'How are transactions processed?',
-          a: 'When you create a drop, XLM is sent to a holding wallet with a memo. When claimed, the funds are transferred from the holding wallet to the claimer. All transactions are recorded on the Stellar blockchain.',
-        },
-        {
-          q: 'What are the transaction fees?',
-          a: 'Stellar\'s base fee is 0.00001 XLM per operation (less than $0.001). Creating and claiming drops each count as one operation, making the platform extremely cost-effective.',
-        },
-        {
-          q: 'Are smart contracts used?',
-          a: 'Yes! We\'re developing Soroban smart contracts for advanced features like time-locked drops, multi-signature claims, and automated reward pools. The MVP uses simpler transaction-based logic.',
-        },
-      ],
+      question: 'How do I get started?',
+      answer: 'First, install the Freighter wallet extension and create an account. Then visit StellarGo, connect your wallet, and complete the onboarding to select your persona (Personal, Business, or Non-Profit). You\'ll need some XLM in your wallet to create drops.'
     },
     {
-      category: 'Troubleshooting',
-      questions: [
-        {
-          q: 'The map isn\'t loading. What should I do?',
-          a: 'Make sure you\'ve enabled location services in your browser. Refresh the page and allow location access when prompted. If issues persist, try a different browser or check your internet connection.',
-        },
-        {
-          q: 'My wallet won\'t connect. Help!',
-          a: 'Ensure you have the Freighter wallet extension installed and unlocked. Visit freighter.app to install. Make sure you\'re using a supported browser (Chrome, Firefox, Brave, Edge).',
-        },
-        {
-          q: 'I\'m near a drop but can\'t claim it.',
-          a: 'Check that: 1) Your location services are active, 2) You\'re within 50 meters, 3) The drop hasn\'t been claimed already, 4) Your wallet is connected. Try refreshing your location.',
-        },
-        {
-          q: 'Transaction failed. What now?',
-          a: 'Common causes: insufficient XLM balance, network congestion (rare on Stellar), or wallet disconnection. Check your balance, reconnect your wallet, and try again. Contact support if issues persist.',
-        },
-      ],
+      question: 'What are the different user personas?',
+      answer: 'Personal Users can share crypto with friends and discover drops. Businesses can reward customers and drive foot traffic with targeted drops. Non-Profits can distribute aid and create fundraising campaigns. Each persona unlocks specific features tailored to your needs.'
     },
+    {
+      question: 'Can I claim my own drops?',
+      answer: 'No, you cannot claim drops you created. This prevents abuse and ensures drops are meant for others. However, you can always cancel an unclaimed drop (feature coming soon) to recover your funds.'
+    },
+    {
+      question: 'What happens to unclaimed drops?',
+      answer: 'Drops can have expiration times set by the creator (1 hour to never). After expiration, unclaimed drops can be recovered by the creator. If no expiration is set, the drop remains available indefinitely until claimed.'
+    },
+    {
+      question: 'Is there a fee for creating drops?',
+      answer: 'StellarGo itself doesn\'t charge fees. However, the Stellar Network charges a minimal transaction fee (typically $0.00001 per operation). You also need a minimum balance of 1 XLM in your wallet to keep the account active.'
+    },
+    {
+      question: 'Can drops be targeted to specific audiences?',
+      answer: 'Yes! When creating a Geo-Drop, you can set the target audience: Public (anyone can claim), Friends Only (requires connection), or For Customers (business feature). This helps tailor drops to your intended recipients.'
+    },
+    {
+      question: 'Is my location data stored?',
+      answer: 'We only store the GPS coordinates of drops you create. Your real-time location is used temporarily to calculate distance to nearby drops but is never permanently stored. We prioritize your privacy.'
+    },
+    {
+      question: 'Can I use StellarGo on mobile?',
+      answer: 'Yes! StellarGo is fully responsive and works great on mobile browsers. For the best experience, use Chrome or Safari. Make sure to enable location services to claim nearby drops.'
+    },
+    {
+      question: 'What if someone claims my drop before I intended?',
+      answer: 'Once you create a drop, it becomes available immediately to anyone in range (based on your target audience setting). Make sure to set appropriate targeting and consider the timing of your drop carefully.'
+    },
+    {
+      question: 'How do levels and badges work?',
+      answer: 'You earn experience by creating and claiming drops. As you level up, you unlock badges and special features. Your level is displayed on your profile and contributes to the leaderboard rankings.'
+    },
+    {
+      question: 'Is StellarGo open source?',
+      answer: 'Yes! StellarGo is open source and available on GitHub. We welcome contributions from the community. Check our GitHub repository for more information on how to contribute.'
+    }
   ];
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8 pb-20">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-accent-900 mb-4">
-          Frequently Asked Questions
-        </h1>
-        <p className="text-lg text-accent-600">
-          Everything you need to know about StellarGo
-        </p>
-      </div>
+    <div className="min-h-screen bg-dark-950 bg-animated pt-20 md:pt-24 pb-20 md:pb-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ type: 'spring', duration: 0.5 }}
+            className="w-20 h-20 bg-gradient-to-br from-cyber-500 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6 pulse-glow"
+          >
+            <HelpCircle className="w-10 h-10 text-dark-500" />
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-5xl font-bold text-white mb-4"
+          >
+            Frequently Asked Questions
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="text-xl text-slate-400"
+          >
+            Everything you need to know about StellarGo
+          </motion.p>
+        </div>
 
-      {/* FAQ Sections */}
-      <div className="space-y-8">
-        {faqs.map((section, sectionIndex) => (
-          <div key={sectionIndex}>
-            <h2 className="text-2xl font-bold text-primary-600 mb-4">
-              {section.category}
-            </h2>
-            <div className="space-y-4">
-              {section.questions.map((faq, faqIndex) => (
-                <Card key={faqIndex} hover>
-                  <h3 className="text-lg font-semibold text-accent-900 mb-2">
-                    {faq.q}
+        {/* FAQ Accordion */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="space-y-4"
+        >
+          {faqs.map((faq, index) => (
+            <Card key={index} className="overflow-hidden">
+              <button
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                className="w-full text-left flex items-start justify-between gap-4 group"
+              >
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-white group-hover:text-cyber-500 transition-colors">
+                    {faq.question}
                   </h3>
-                  <p className="text-accent-700 leading-relaxed">{faq.a}</p>
-                </Card>
-              ))}
+                </div>
+                <motion.div
+                  animate={{ rotate: openIndex === index ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex-shrink-0 mt-1"
+                >
+                  <ChevronDown className="w-5 h-5 text-cyber-500" />
+                </motion.div>
+              </button>
+
+              <AnimatePresence>
+                {openIndex === index && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="pt-4 pb-2">
+                      <p className="text-slate-400 leading-relaxed">{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </Card>
+          ))}
+        </motion.div>
+
+        {/* Still have questions? */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-12"
+        >
+          <Card className="text-center bg-gradient-to-br from-cyber-500/10 to-cyan-500/10 border-2 border-cyber-500/20">
+            <Sparkles className="w-12 h-12 text-cyber-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-white mb-2">Still have questions?</h2>
+            <p className="text-slate-400 mb-6">
+              Join our community or reach out to our team
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <a
+                href="https://github.com/MYounesDev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold transition-colors"
+              >
+                GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/in/Myounesdev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 bg-cyber-500 hover:bg-cyber-400 text-dark-500 rounded-xl font-semibold transition-colors"
+              >
+                LinkedIn
+              </a>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Contact Section */}
-      <Card className="mt-12 bg-gradient-to-br from-primary-50 to-primary-100 border-primary-200">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-accent-900 mb-3">
-            Still have questions?
-          </h2>
-          <p className="text-accent-700 mb-6">
-            We're here to help! Reach out to our community or support team.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
-              href="https://discord.gg/stellar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Join Discord Community
-            </a>
-            <a
-              href="mailto:support@stellargo.example"
-              className="inline-flex items-center justify-center px-6 py-3 bg-white text-primary-600 font-medium rounded-lg border-2 border-primary-600 hover:bg-primary-50 transition-colors"
-            >
-              Email Support
-            </a>
-          </div>
-        </div>
-      </Card>
-
-      {/* Additional Resources */}
-      <div className="mt-12 text-center">
-        <h3 className="text-xl font-semibold text-accent-900 mb-4">
-          Additional Resources
-        </h3>
-        <div className="flex flex-wrap justify-center gap-4 text-sm">
-          <a
-            href="https://stellar.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-600 hover:text-primary-800 underline"
-          >
-            Stellar Network
-          </a>
-          <span className="text-accent-300">•</span>
-          <a
-            href="https://freighter.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-600 hover:text-primary-800 underline"
-          >
-            Freighter Wallet
-          </a>
-          <span className="text-accent-300">•</span>
-          <a
-            href="https://soroban.stellar.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-600 hover:text-primary-800 underline"
-          >
-            Soroban Docs
-          </a>
-          <span className="text-accent-300">•</span>
-          <a
-            href="https://laboratory.stellar.org"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-primary-600 hover:text-primary-800 underline"
-          >
-            Stellar Laboratory
-          </a>
-        </div>
+          </Card>
+        </motion.div>
       </div>
     </div>
   );
-};
-
-export default FAQPage;
-
+}

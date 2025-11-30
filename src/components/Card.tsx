@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 interface CardProps {
@@ -21,12 +23,12 @@ const Card: React.FC<CardProps> = ({
   };
 
   const hoverStyles = hover
-    ? 'hover:shadow-lg hover:scale-[1.02] transition-all duration-200'
+    ? 'hover:scale-105 hover:shadow-cyber-500/20 transition-all duration-300'
     : '';
 
   return (
     <div
-      className={`bg-white rounded-xl shadow-md border border-accent-200 ${paddings[padding]} ${hoverStyles} ${className}`}
+      className={`glass-dark rounded-2xl shadow-xl ${paddings[padding]} ${hoverStyles} ${className}`}
     >
       {children}
     </div>

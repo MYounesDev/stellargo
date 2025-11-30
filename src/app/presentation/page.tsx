@@ -1,393 +1,1134 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import QRCode from 'qrcode.react';
+import { 
+  ChevronLeft, 
+  ChevronRight, 
+  Maximize, 
+  Minimize,
+  Globe,
+  Rocket,
+  MapPin,
+  Zap,
+  Users,
+  Code,
+  Layers,
+  TrendingUp,
+  DollarSign,
+  Shield
+} from 'lucide-react';
 
-interface Slide {
-  id: number;
-  title: string;
-  subtitle?: string;
-  content?: React.ReactNode;
-  background?: string;
+interface SlideContent {
+  en: {
+    title: string;
+    subtitle?: string;
+    content?: React.ReactNode;
+  };
+  tr?: {
+    title: string;
+    subtitle?: string;
+    content?: React.ReactNode;
+  };
+  background: string;
+  theme: 'dark' | 'bright' | 'space' | 'gradient';
 }
 
-const PresentationPage: React.FC = () => {
+export default function PresentationPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [showNotes, setShowNotes] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [language, setLanguage] = useState<'en' | 'tr'>('en');
+  const [isStarted, setIsStarted] = useState(false);
+  const [turkishEnabled, setTurkishEnabled] = useState(false);
 
-  const slides: Slide[] = [
+  // Check if Turkish is enabled from environment
+  useEffect(() => {
+    const enabled = process.env.NEXT_PUBLIC_TURKISH === 'true';
+    setTurkishEnabled(enabled);
+  }, []);
+
+  // Slide definitions
+  const slides: SlideContent[] = [
     {
-      id: 1,
-      title: 'StellarGo',
-      subtitle: 'Not just a tool. A Platform.',
-      background: 'from-dark-900 via-dark-800 to-neon-900/20',
-    },
-    {
-      id: 2,
-      title: 'The Problem',
-      subtitle: 'Crypto is lonely. It\'s stuck on screens.',
-      content: (
-        <div className="flex justify-center mt-12">
-          <div className="glass-dark p-12 rounded-3xl max-w-2xl">
-            <div className="text-6xl mb-6 text-center opacity-30">💻</div>
-            <p className="text-2xl text-gray-400 text-center italic">
-              "Traditional crypto wallets are boring interfaces with no real-world connection."
+      en: {
+        title: "StellarGo",
+        subtitle: "Not just a tool. A Platform.",
+        content: (
+          <div className="text-center">
+            <motion.div
+              animate={{ 
+                y: [0, -20, 0],
+                rotate: [0, 10, -10, 0]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="text-9xl mb-8"
+            >
+              🚀
+            </motion.div>
+            <p className="text-2xl text-gray-300 mb-12">
+              Where Crypto Meets the Real World
             </p>
           </div>
-        </div>
-      ),
-    },
-    {
-      id: 3,
-      title: 'The Solution',
-      subtitle: 'We bring Crypto to the Streets',
-      content: (
-        <div className="flex justify-center mt-12">
-          <motion.div
-            animate={{
-              scale: [1, 1.1, 1],
-              rotate: [0, 5, -5, 0],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="text-9xl"
-          >
-            🗺️💰
-          </motion.div>
-        </div>
-      ),
-    },
-    {
-      id: 4,
-      title: 'Why Stellar? (Crucial)',
-      subtitle: 'Only Stellar makes this business model viable',
-      content: (
-        <div className="mt-12 space-y-8">
-          <div className="glass p-8 rounded-3xl max-w-4xl mx-auto">
-            <h3 className="text-3xl font-bold mb-6 text-neon-500">Cost Comparison</h3>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="text-center p-6 bg-red-500/10 rounded-2xl border-2 border-red-500">
-                <p className="text-gray-400 mb-2">Ethereum</p>
-                <p className="text-5xl font-bold text-red-500">$5.00</p>
-                <p className="text-sm text-gray-500 mt-2">per transaction</p>
-              </div>
-              <div className="text-center p-6 bg-neon-500/10 rounded-2xl border-2 border-neon-500">
-                <p className="text-gray-400 mb-2">Stellar</p>
-                <p className="text-5xl font-bold text-neon-500">$0.00001</p>
-                <p className="text-sm text-gray-500 mt-2">per transaction</p>
-              </div>
-            </div>
-          </div>
-          <div className="glass p-6 rounded-2xl max-w-4xl mx-auto">
-            <p className="text-xl text-center text-gray-300">
-              <span className="text-neon-500 font-bold">Gamification requires Speed (3s) and Low Cost.</span>
-              <br />
-              Only Stellar makes this business model viable.
+        )
+      },
+      tr: {
+        title: "StellarGo",
+        subtitle: "Sadece bir araç değil. Bir Platform.",
+        content: (
+          <div className="text-center">
+            <motion.div
+              animate={{ 
+                y: [0, -20, 0],
+                rotate: [0, 10, -10, 0]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="text-9xl mb-8"
+            >
+              🚀
+            </motion.div>
+            <p className="text-2xl text-amber-300 mb-12">
+              Kripto ile Gerçek Dünya Buluşuyor
             </p>
           </div>
-        </div>
-      ),
+        )
+      },
+      background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)',
+      theme: 'dark'
     },
     {
-      id: 5,
-      title: 'Business Model & Validation',
-      subtitle: 'Location-Based SocialFi',
-      content: (
-        <div className="mt-12 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            <div className="glass p-8 rounded-3xl">
-              <div className="text-5xl mb-4">📍</div>
-              <h3 className="text-2xl font-bold mb-3 text-neon-500">Market Position</h3>
-              <p className="text-gray-300 text-lg">
-                Location-Based SocialFi Platform
-              </p>
+      en: {
+        title: "The Problem 😔",
+        content: (
+          <div className="space-y-8 max-w-4xl mx-auto">
+            <div className="glass-dark p-8 rounded-2xl">
+              <h3 className="text-3xl font-bold mb-4 text-red-400">Crypto is Lonely</h3>
+              <p className="text-xl text-gray-300">Stuck on screens. No real-world interaction.</p>
             </div>
-            <div className="glass p-8 rounded-3xl">
-              <div className="text-5xl mb-4">☕</div>
-              <h3 className="text-2xl font-bold mb-3 text-neon-500">Use Case</h3>
-              <p className="text-gray-300 text-lg">
-                "Starbucks drops tokens in-store to drive foot traffic"
-              </p>
+            <div className="glass-dark p-8 rounded-2xl">
+              <h3 className="text-3xl font-bold mb-4 text-orange-400">Fragmented Experience</h3>
+              <p className="text-xl text-gray-300">4 different apps to do 1 simple thing.</p>
+            </div>
+            <div className="glass-dark p-8 rounded-2xl">
+              <h3 className="text-3xl font-bold mb-4 text-yellow-400">No Engagement</h3>
+              <p className="text-xl text-gray-300">Boring interfaces. No gamification. No fun.</p>
             </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      id: 6,
-      title: 'Smart Contracts',
-      subtitle: 'Powered by Soroban',
-      content: (
-        <div className="mt-12 max-w-4xl mx-auto">
-          <div className="glass p-8 rounded-3xl space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="text-5xl">🔐</div>
-              <h3 className="text-2xl font-bold text-neon-500">Lat/Long Verification</h3>
+        )
+      },
+      tr: {
+        title: "Problem 😔",
+        content: (
+          <div className="space-y-8 max-w-4xl mx-auto">
+            <div className="glass-dark p-8 rounded-2xl border-2 border-amber-500/30">
+              <h3 className="text-3xl font-bold mb-4 text-red-400">Kripto Yalnız</h3>
+              <p className="text-xl text-amber-200">Ekranlarda mahkum. Gerçek dünya etkileşimi yok.</p>
             </div>
-            <div className="bg-dark-800 p-6 rounded-2xl font-mono text-sm text-neon-400">
-              <p>fn create_drop(lat: i64, lng: i64, amount: i128)</p>
-              <p className="mt-2">fn claim_drop(user_lat: i64, user_lng: i64)</p>
-              <p className="mt-2 text-gray-500">// Verifies user is within 50m radius</p>
+            <div className="glass-dark p-8 rounded-2xl border-2 border-amber-500/30">
+              <h3 className="text-3xl font-bold mb-4 text-orange-400">Parçalı Deneyim</h3>
+              <p className="text-xl text-amber-200">1 basit şey için 4 farklı uygulama.</p>
             </div>
-            <p className="text-gray-400 text-center">
-              Smart contracts verify physical proximity before allowing claims
-            </p>
+            <div className="glass-dark p-8 rounded-2xl border-2 border-amber-500/30">
+              <h3 className="text-3xl font-bold mb-4 text-yellow-400">Etkileşim Yok</h3>
+              <p className="text-xl text-amber-200">Sıkıcı arayüzler. Oyunlaştırma yok. Eğlence yok.</p>
+            </div>
           </div>
-        </div>
-      ),
+        )
+      },
+      background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+      theme: 'dark'
     },
     {
-      id: 7,
-      title: 'Tech Stack',
-      subtitle: 'Modern, Fast, Scalable',
-      content: (
-        <div className="mt-12 max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {[
-              { name: 'Next.js', icon: '⚛️', desc: 'React Framework' },
-              { name: 'Tailwind', icon: '🎨', desc: 'Styling' },
-              { name: 'Soroban', icon: '🔗', desc: 'Smart Contracts' },
-              { name: 'Freighter', icon: '🔐', desc: 'Wallet' },
-              { name: 'MongoDB', icon: '🗄️', desc: 'Database' },
-              { name: 'Framer Motion', icon: '✨', desc: 'Animations' },
-            ].map((tech, index) => (
+      en: {
+        title: "The Solution ✨",
+        subtitle: "We bring Crypto to the Streets",
+        content: (
+          <div className="text-center max-w-5xl mx-auto">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="relative mb-12"
+            >
+              <div className="text-9xl">📍</div>
               <motion.div
-                key={tech.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className="glass p-6 rounded-2xl text-center hover:bg-white/10 transition-all"
+                animate={{ 
+                  scale: [1, 1.5, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0 flex items-center justify-center"
               >
-                <div className="text-4xl mb-3">{tech.icon}</div>
-                <h4 className="font-bold text-lg text-gray-100">{tech.name}</h4>
-                <p className="text-sm text-gray-400">{tech.desc}</p>
+                <div className="w-48 h-48 rounded-full bg-[#00ff9d]/20 blur-2xl"></div>
               </motion.div>
-            ))}
+            </motion.div>
+            <h3 className="text-4xl font-bold mb-6 text-gradient">
+              Geo-Drop: Pokémon GO meets DeFi
+            </h3>
+            <p className="text-2xl text-gray-300 mb-8">
+              Drop crypto tokens at real-world locations. Let users hunt and claim them.
+            </p>
+            <div className="grid grid-cols-3 gap-6 mt-12">
+              <div className="glass p-6 rounded-xl">
+                <MapPin className="w-12 h-12 mx-auto mb-4 text-[#00ff9d]" />
+                <p className="text-lg">Location-Based</p>
+              </div>
+              <div className="glass p-6 rounded-xl">
+                <Zap className="w-12 h-12 mx-auto mb-4 text-[#00d4ff]" />
+                <p className="text-lg">Instant Claims</p>
+              </div>
+              <div className="glass p-6 rounded-xl">
+                <Users className="w-12 h-12 mx-auto mb-4 text-[#00ff9d]" />
+                <p className="text-lg">Social & Fun</p>
+              </div>
+            </div>
           </div>
-        </div>
-      ),
+        )
+      },
+      tr: {
+        title: "Çözüm ✨",
+        subtitle: "Kriptoyu Sokaklara Taşıyoruz",
+        content: (
+          <div className="text-center max-w-5xl mx-auto">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.1, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="relative mb-12"
+            >
+              <div className="text-9xl">📍</div>
+              <motion.div
+                animate={{ 
+                  scale: [1, 1.5, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{ 
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <div className="w-48 h-48 rounded-full bg-amber-500/20 blur-2xl"></div>
+              </motion.div>
+            </motion.div>
+            <h3 className="text-4xl font-bold mb-6 text-amber-400">
+              Geo-Drop: Pokémon GO + DeFi
+            </h3>
+            <p className="text-2xl text-amber-200 mb-8">
+              Gerçek dünya konumlarına kripto token'ları bırak. Kullanıcılar avsınlar ve talep etsinler.
+            </p>
+            <div className="grid grid-cols-3 gap-6 mt-12">
+              <div className="glass p-6 rounded-xl border-2 border-amber-500/30">
+                <MapPin className="w-12 h-12 mx-auto mb-4 text-amber-400" />
+                <p className="text-lg text-amber-200">Konum Tabanlı</p>
+              </div>
+              <div className="glass p-6 rounded-xl border-2 border-amber-500/30">
+                <Zap className="w-12 h-12 mx-auto mb-4 text-amber-400" />
+                <p className="text-lg text-amber-200">Anında Talep</p>
+              </div>
+              <div className="glass p-6 rounded-xl border-2 border-amber-500/30">
+                <Users className="w-12 h-12 mx-auto mb-4 text-amber-400" />
+                <p className="text-lg text-amber-200">Sosyal & Eğlenceli</p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      background: 'linear-gradient(135deg, #0a0a0a 0%, #1a4d2e 50%, #0a0a0a 100%)',
+      theme: 'bright'
     },
     {
-      id: 8,
-      title: 'Demo & QR',
-      subtitle: 'Scan to open the app on mobile',
-      content: (
-        <div className="flex flex-col items-center justify-center mt-12 space-y-8">
-          <div className="glass p-8 rounded-3xl">
-            <QRCode
-              value={typeof window !== 'undefined' ? window.location.origin : 'https://stellargo.app'}
-              size={300}
-              bgColor="#0a0a0a"
-              fgColor="#00FF41"
-              level="H"
-              className="rounded-2xl"
-            />
+      en: {
+        title: "Why Stellar? ⭐",
+        subtitle: "The Winning Argument",
+        content: (
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12">
+              <h3 className="text-3xl font-bold mb-8 text-center text-gradient">Fee Comparison</h3>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="glass-dark p-8 rounded-2xl text-center">
+                  <img src="https://cdn.simpleicons.org/ethereum/627EEA" alt="Ethereum" className="w-16 h-16 mx-auto mb-4" />
+                  <h4 className="text-2xl font-bold mb-4 text-red-400">Ethereum</h4>
+                  <div className="text-6xl font-bold text-red-400 mb-2">$5.00</div>
+                  <p className="text-xl text-gray-300">per transaction</p>
+                  <p className="text-lg text-red-300 mt-4">❌ Too expensive for micro-drops</p>
+                </div>
+                <div className="glass p-8 rounded-2xl text-center border-2 border-[#00ff9d]">
+                  <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Stellar" className="w-16 h-16 mx-auto mb-4" />
+                  <h4 className="text-2xl font-bold mb-4 text-[#00ff9d]">Stellar</h4>
+                  <div className="text-6xl font-bold text-[#00ff9d] mb-2">$0.00001</div>
+                  <p className="text-xl text-gray-300">per transaction</p>
+                  <p className="text-lg text-[#00ff9d] mt-4">✅ Perfect for gamification!</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-6 mt-8">
+              <div className="glass p-6 rounded-xl">
+                <Zap className="w-10 h-10 mb-3 text-[#00ff9d]" />
+                <h4 className="text-xl font-bold mb-2">Lightning Fast</h4>
+                <p className="text-gray-300">~3-5 seconds confirmation</p>
+              </div>
+              <div className="glass p-6 rounded-xl">
+                <Shield className="w-10 h-10 mb-3 text-[#00d4ff]" />
+                <h4 className="text-xl font-bold mb-2">Battle-Tested</h4>
+                <p className="text-gray-300">10+ years of reliability</p>
+              </div>
+            </div>
           </div>
-          <p className="text-2xl text-gray-400">
-            Scan to experience <span className="text-neon-500 font-bold">StellarGo</span>
-          </p>
-        </div>
-      ),
+        )
+      },
+      tr: {
+        title: "Neden Stellar? ⭐",
+        subtitle: "Kazanan Argüman",
+        content: (
+          <div className="max-w-5xl mx-auto">
+            <div className="mb-12">
+              <h3 className="text-3xl font-bold mb-8 text-center text-amber-400">Ücret Karşılaştırması</h3>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="glass-dark p-8 rounded-2xl text-center border-2 border-amber-500/30">
+                  <img src="https://cdn.simpleicons.org/ethereum/627EEA" alt="Ethereum" className="w-16 h-16 mx-auto mb-4" />
+                  <h4 className="text-2xl font-bold mb-4 text-red-400">Ethereum</h4>
+                  <div className="text-6xl font-bold text-red-400 mb-2">$5.00</div>
+                  <p className="text-xl text-amber-200">işlem başına</p>
+                  <p className="text-lg text-red-300 mt-4">❌ Mikro-drop'lar için çok pahalı</p>
+                </div>
+                <div className="glass p-8 rounded-2xl text-center border-2 border-amber-400">
+                  <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Stellar" className="w-16 h-16 mx-auto mb-4" />
+                  <h4 className="text-2xl font-bold mb-4 text-amber-400">Stellar</h4>
+                  <div className="text-6xl font-bold text-amber-400 mb-2">$0.00001</div>
+                  <p className="text-xl text-amber-200">işlem başına</p>
+                  <p className="text-lg text-amber-400 mt-4">✅ Oyunlaştırma için mükemmel!</p>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-6 mt-8">
+              <div className="glass p-6 rounded-xl border-2 border-amber-500/30">
+                <Zap className="w-10 h-10 mb-3 text-amber-400" />
+                <h4 className="text-xl font-bold mb-2 text-amber-200">Şimşek Hızı</h4>
+                <p className="text-amber-200">~3-5 saniye onay</p>
+              </div>
+              <div className="glass p-6 rounded-xl border-2 border-amber-500/30">
+                <Shield className="w-10 h-10 mb-3 text-amber-400" />
+                <h4 className="text-xl font-bold mb-2 text-amber-200">Savaş Testi Geçmiş</h4>
+                <p className="text-amber-200">10+ yıl güvenilirlik</p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      background: 'radial-gradient(circle at center, #1a1a4d 0%, #0a0a0a 100%)',
+      theme: 'space'
     },
+    {
+      en: {
+        title: "Business Model 💼",
+        subtitle: "Location-Based SocialFi",
+        content: (
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 mb-12">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="glass p-8 rounded-2xl text-center cursor-pointer"
+              >
+                <div className="text-6xl mb-4">👤</div>
+                <h3 className="text-2xl font-bold mb-4 text-[#00ff9d]">Personal</h3>
+                <ul className="text-left space-y-2 text-gray-300">
+                  <li>• Birthday surprises</li>
+                  <li>• Treasure hunts</li>
+                  <li>• Gift drops</li>
+                  <li>• Event rewards</li>
+                </ul>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="glass p-8 rounded-2xl text-center cursor-pointer"
+              >
+                <div className="text-6xl mb-4">🏢</div>
+                <h3 className="text-2xl font-bold mb-4 text-[#00d4ff]">Business</h3>
+                <ul className="text-left space-y-2 text-gray-300">
+                  <li>• Customer acquisition</li>
+                  <li>• Loyalty programs</li>
+                  <li>• Foot traffic boost</li>
+                  <li>• Brand awareness</li>
+                </ul>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="glass p-8 rounded-2xl text-center cursor-pointer"
+              >
+                <div className="text-6xl mb-4">❤️</div>
+                <h3 className="text-2xl font-bold mb-4 text-[#ff006e]">Non-Profit</h3>
+                <ul className="text-left space-y-2 text-gray-300">
+                  <li>• Donation drives</li>
+                  <li>• Community events</li>
+                  <li>• Awareness campaigns</li>
+                  <li>• Volunteer rewards</li>
+                </ul>
+              </motion.div>
+            </div>
+            <div className="glass-enhanced p-8 rounded-2xl">
+              <h3 className="text-2xl font-bold mb-4 text-center text-gradient">Real-World Example</h3>
+              <div className="flex items-center justify-center gap-6">
+                <div className="text-5xl">☕</div>
+                <div className="text-left">
+                  <p className="text-xl text-gray-300">
+                    <span className="font-bold text-[#00ff9d]">Starbucks</span> drops tokens in-store
+                  </p>
+                  <p className="text-lg text-gray-400 mt-2">
+                    → Drives foot traffic • Increases sales • Builds loyalty
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      tr: {
+        title: "İş Modeli 💼",
+        subtitle: "Konum Tabanlı SocialFi",
+        content: (
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-3 gap-8 mb-12">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="glass p-8 rounded-2xl text-center cursor-pointer border-2 border-amber-500/30"
+              >
+                <div className="text-6xl mb-4">👤</div>
+                <h3 className="text-2xl font-bold mb-4 text-amber-400">Kişisel</h3>
+                <ul className="text-left space-y-2 text-amber-200">
+                  <li>• Doğum günü sürprizleri</li>
+                  <li>• Hazine avları</li>
+                  <li>• Hediye bırakma</li>
+                  <li>• Etkinlik ödülleri</li>
+                </ul>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="glass p-8 rounded-2xl text-center cursor-pointer border-2 border-amber-500/30"
+              >
+                <div className="text-6xl mb-4">🏢</div>
+                <h3 className="text-2xl font-bold mb-4 text-amber-400">İş</h3>
+                <ul className="text-left space-y-2 text-amber-200">
+                  <li>• Müşteri kazanımı</li>
+                  <li>• Sadakat programları</li>
+                  <li>• Trafik artışı</li>
+                  <li>• Marka bilinirliği</li>
+                </ul>
+              </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="glass p-8 rounded-2xl text-center cursor-pointer border-2 border-amber-500/30"
+              >
+                <div className="text-6xl mb-4">❤️</div>
+                <h3 className="text-2xl font-bold mb-4 text-amber-400">Kâr Amacı Gütmeyen</h3>
+                <ul className="text-left space-y-2 text-amber-200">
+                  <li>• Bağış kampanyaları</li>
+                  <li>• Topluluk etkinlikleri</li>
+                  <li>• Farkındalık kampanyaları</li>
+                  <li>• Gönüllü ödülleri</li>
+                </ul>
+              </motion.div>
+            </div>
+            <div className="glass-enhanced p-8 rounded-2xl border-2 border-amber-500/30">
+              <h3 className="text-2xl font-bold mb-4 text-center text-amber-400">Gerçek Dünya Örneği</h3>
+              <div className="flex items-center justify-center gap-6">
+                <div className="text-5xl">☕</div>
+                <div className="text-left">
+                  <p className="text-xl text-amber-200">
+                    <span className="font-bold text-amber-400">Starbucks</span> mağaza içinde token bırakır
+                  </p>
+                  <p className="text-lg text-amber-300 mt-2">
+                    → Trafiği artırır • Satışları yükseltir • Sadakat oluşturur
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      background: 'linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)',
+      theme: 'gradient'
+    },
+    {
+      en: {
+        title: "Smart Contracts 🔐",
+        subtitle: "Powered by Soroban",
+        content: (
+          <div className="max-w-5xl mx-auto">
+            <div className="glass-enhanced p-8 rounded-2xl mb-8">
+              <h3 className="text-2xl font-bold mb-6 text-[#00ff9d]">How It Works</h3>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#00ff9d]/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-[#00ff9d]">1</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2">Create Drop</h4>
+                    <p className="text-gray-300">Sponsor defines: Amount, Location (Lat/Long), Radius, Expiry</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#00d4ff]/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-[#00d4ff]">2</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2">Location Verification</h4>
+                    <p className="text-gray-300">Smart contract checks if user is within specified radius</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-[#00ff9d]/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-[#00ff9d]">3</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2">Instant Claim</h4>
+                    <p className="text-gray-300">Tokens transferred directly to user's wallet - no middleman!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="glass p-6 rounded-xl">
+              <Code className="w-12 h-12 mx-auto mb-4 text-[#00ff9d]" />
+              <p className="text-center text-lg text-gray-300">
+                <span className="font-bold text-[#00ff9d]">Rust-based</span> smart contracts on Soroban
+              </p>
+              <p className="text-center text-gray-400 mt-2">
+                Fast • Secure • Cost-effective
+              </p>
+            </div>
+          </div>
+        )
+      },
+      tr: {
+        title: "Akıllı Sözleşmeler 🔐",
+        subtitle: "Soroban Tarafından Güçlendirildi",
+        content: (
+          <div className="max-w-5xl mx-auto">
+            <div className="glass-enhanced p-8 rounded-2xl mb-8 border-2 border-amber-500/30">
+              <h3 className="text-2xl font-bold mb-6 text-amber-400">Nasıl Çalışır</h3>
+              <div className="space-y-6">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-amber-400">1</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2 text-amber-200">Drop Oluştur</h4>
+                    <p className="text-amber-200">Sponsor tanımlar: Miktar, Konum (Enlem/Boylam), Yarıçap, Son Kullanma</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-amber-400">2</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2 text-amber-200">Konum Doğrulama</h4>
+                    <p className="text-amber-200">Akıllı sözleşme kullanıcının belirtilen yarıçap içinde olup olmadığını kontrol eder</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-2xl font-bold text-amber-400">3</span>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold mb-2 text-amber-200">Anında Talep</h4>
+                    <p className="text-amber-200">Token'lar doğrudan kullanıcının cüzdanına aktarılır - aracı yok!</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="glass p-6 rounded-xl border-2 border-amber-500/30">
+              <Code className="w-12 h-12 mx-auto mb-4 text-amber-400" />
+              <p className="text-center text-lg text-amber-200">
+                Soroban üzerinde <span className="font-bold text-amber-400">Rust tabanlı</span> akıllı sözleşmeler
+              </p>
+              <p className="text-center text-amber-300 mt-2">
+                Hızlı • Güvenli • Uygun maliyetli
+              </p>
+            </div>
+          </div>
+        )
+      },
+      background: 'radial-gradient(circle at top, #1a1a4d 0%, #0a0a0a 60%)',
+      theme: 'space'
+    },
+    {
+      en: {
+        title: "Tech Stack 🛠️",
+        content: (
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer">
+                <img src="https://cdn.simpleicons.org/nextdotjs/000000" alt="Next.js" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">Next.js 14</h3>
+                <p className="text-gray-400 text-sm">React Framework</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer">
+                <img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">Tailwind CSS</h3>
+                <p className="text-gray-400 text-sm">Styling</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer">
+                <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Soroban" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">Soroban</h3>
+                <p className="text-gray-400 text-sm">Smart Contracts</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer">
+                <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Stellar SDK" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">Stellar SDK</h3>
+                <p className="text-gray-400 text-sm">Blockchain</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer">
+                <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Freighter" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">Freighter</h3>
+                <p className="text-gray-400 text-sm">Wallet Integration</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer">
+                <img src="https://cdn.simpleicons.org/mongodb/47A248" alt="MongoDB" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">MongoDB</h3>
+                <p className="text-gray-400 text-sm">Database</p>
+              </div>
+            </div>
+            <div className="mt-12 glass-enhanced p-6 rounded-xl">
+              <div className="flex items-center justify-center gap-6">
+                <Layers className="w-10 h-10 text-[#00ff9d]" />
+                <p className="text-xl text-gray-300">
+                  <span className="font-bold text-[#00ff9d]">Full-Stack</span> • 
+                  <span className="font-bold text-[#00d4ff]"> Type-Safe</span> • 
+                  <span className="font-bold text-[#00ff9d]"> Production-Ready</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      tr: {
+        title: "Teknoloji Yığını 🛠️",
+        content: (
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer border-2 border-amber-500/30">
+                <img src="https://cdn.simpleicons.org/nextdotjs/000000" alt="Next.js" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-amber-200">Next.js 14</h3>
+                <p className="text-amber-300 text-sm">React Framework</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer border-2 border-amber-500/30">
+                <img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" alt="Tailwind CSS" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-amber-200">Tailwind CSS</h3>
+                <p className="text-amber-300 text-sm">Stil</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer border-2 border-amber-500/30">
+                <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Soroban" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-amber-200">Soroban</h3>
+                <p className="text-amber-300 text-sm">Akıllı Sözleşmeler</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer border-2 border-amber-500/30">
+                <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Stellar SDK" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-amber-200">Stellar SDK</h3>
+                <p className="text-amber-300 text-sm">Blockchain</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer border-2 border-amber-500/30">
+                <img src="https://cdn.simpleicons.org/stellar/7D00FF" alt="Freighter" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-amber-200">Freighter</h3>
+                <p className="text-amber-300 text-sm">Cüzdan Entegrasyonu</p>
+              </div>
+              <div className="glass p-8 rounded-2xl text-center hover-lift cursor-pointer border-2 border-amber-500/30">
+                <img src="https://cdn.simpleicons.org/mongodb/47A248" alt="MongoDB" className="w-16 h-16 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2 text-amber-200">MongoDB</h3>
+                <p className="text-amber-300 text-sm">Veritabanı</p>
+              </div>
+            </div>
+            <div className="mt-12 glass-enhanced p-6 rounded-xl border-2 border-amber-500/30">
+              <div className="flex items-center justify-center gap-6">
+                <Layers className="w-10 h-10 text-amber-400" />
+                <p className="text-xl text-amber-200">
+                  <span className="font-bold text-amber-400">Full-Stack</span> • 
+                  <span className="font-bold text-amber-400"> Tip Güvenli</span> • 
+                  <span className="font-bold text-amber-400"> Üretime Hazır</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        )
+      },
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+      theme: 'gradient'
+    },
+    {
+      en: {
+        title: "Try It Now! 📱",
+        content: (
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.05, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="mb-12"
+            >
+              <div className="inline-block glass-enhanced p-12 rounded-3xl">
+                <img src="/qr.png" alt="QR Code" className="w-64 h-64 mx-auto mb-4" />
+                <p className="text-xl text-gray-300">Scan QR Code for Mobile Demo</p>
+              </div>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <a 
+                href="https://stellargo.app" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass p-6 rounded-xl hover-lift cursor-pointer"
+              >
+                <Globe className="w-12 h-12 mx-auto mb-3 text-[#00ff9d]" />
+                <h3 className="text-lg font-bold mb-2">Live Demo</h3>
+                <p className="text-sm text-gray-400">stellargo.app</p>
+              </a>
+              <a 
+                href="https://github.com/MYounesDev" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass p-6 rounded-xl hover-lift cursor-pointer"
+              >
+                <Code className="w-12 h-12 mx-auto mb-3 text-[#00d4ff]" />
+                <h3 className="text-lg font-bold mb-2">GitHub</h3>
+                <p className="text-sm text-gray-400">Open Source</p>
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/Myounesdev" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass p-6 rounded-xl hover-lift cursor-pointer"
+              >
+                <Users className="w-12 h-12 mx-auto mb-3 text-[#00ff9d]" />
+                <h3 className="text-lg font-bold mb-2">Connect</h3>
+                <p className="text-sm text-gray-400">LinkedIn</p>
+              </a>
+            </div>
+
+            <div className="glass-enhanced p-8 rounded-2xl">
+              <h3 className="text-3xl font-bold mb-4 text-gradient">
+                Thank You! 🙏
+              </h3>
+              <p className="text-xl text-gray-300">
+                Questions? Let's chat!
+              </p>
+            </div>
+          </div>
+        )
+      },
+      tr: {
+        title: "Şimdi Dene! 📱",
+        content: (
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.div
+              animate={{ 
+                scale: [1, 1.05, 1],
+                rotate: [0, 5, -5, 0]
+              }}
+              transition={{ 
+                duration: 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+              className="mb-12"
+            >
+              <div className="inline-block glass-enhanced p-12 rounded-3xl border-2 border-amber-500/30">
+                <img src="/qr.png" alt="QR Code" className="w-64 h-64 mx-auto mb-4" />
+                <p className="text-xl text-amber-200">Mobil Demo için QR Kodu Tara</p>
+              </div>
+            </motion.div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              <a 
+                href="https://stellargo.app" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass p-6 rounded-xl hover-lift cursor-pointer border-2 border-amber-500/30"
+              >
+                <Globe className="w-12 h-12 mx-auto mb-3 text-amber-400" />
+                <h3 className="text-lg font-bold mb-2 text-amber-200">Canlı Demo</h3>
+                <p className="text-sm text-amber-300">stellargo.app</p>
+              </a>
+              <a 
+                href="https://github.com/MYounesDev" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass p-6 rounded-xl hover-lift cursor-pointer border-2 border-amber-500/30"
+              >
+                <Code className="w-12 h-12 mx-auto mb-3 text-amber-400" />
+                <h3 className="text-lg font-bold mb-2 text-amber-200">GitHub</h3>
+                <p className="text-sm text-amber-300">Açık Kaynak</p>
+              </a>
+              <a 
+                href="https://www.linkedin.com/in/Myounesdev" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="glass p-6 rounded-xl hover-lift cursor-pointer border-2 border-amber-500/30"
+              >
+                <Users className="w-12 h-12 mx-auto mb-3 text-amber-400" />
+                <h3 className="text-lg font-bold mb-2 text-amber-200">Bağlan</h3>
+                <p className="text-sm text-amber-300">LinkedIn</p>
+              </a>
+            </div>
+
+            <div className="glass-enhanced p-8 rounded-2xl border-2 border-amber-500/30">
+              <h3 className="text-3xl font-bold mb-4 text-amber-400">
+                Teşekkürler! 🙏
+              </h3>
+              <p className="text-xl text-amber-200">
+                Sorular? Hadi sohbet edelim!
+              </p>
+            </div>
+          </div>
+        )
+      },
+      background: 'linear-gradient(135deg, #0a0a0a 0%, #1a4d2e 25%, #0a0a0a 50%, #1a4d2e 75%, #0a0a0a 100%)',
+      theme: 'bright'
+    }
   ];
 
+  // Navigation functions
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  }, [slides.length]);
+
+  const prevSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  }, [slides.length]);
+
+  const goToSlide = useCallback((index: number) => {
+    setCurrentSlide(index);
+  }, []);
+
+  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
         nextSlide();
       } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
         prevSlide();
-      } else if (e.key === 'n' || e.key === 'N') {
-        setShowNotes(!showNotes);
+      } else if (e.key === 'Escape' && isFullscreen) {
+        document.exitFullscreen();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide, showNotes]);
+  }, [nextSlide, prevSlide, isFullscreen]);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  // Mouse wheel language toggle
+  useEffect(() => {
+    if (!turkishEnabled) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      setLanguage((prev) => prev === 'en' ? 'tr' : 'en');
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [turkishEnabled]);
+
+  // Mouse click navigation
+  const handleClick = (e: React.MouseEvent) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const width = rect.width;
+
+    if (x > width / 2) {
+      nextSlide();
+    } else {
+      prevSlide();
+    }
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  // Right-click navigation
+  const handleContextMenu = (e: React.MouseEvent) => {
+    e.preventDefault();
+    prevSlide();
   };
 
-  const currentSlideData = slides[currentSlide];
+  // Fullscreen toggle
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+        setIsStarted(true);
+      });
+    } else {
+      document.exitFullscreen().then(() => {
+        setIsFullscreen(false);
+      });
+    }
+  }, []);
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
+
+  // Start presentation
+  const startPresentation = () => {
+    toggleFullscreen();
+  };
+
+  const currentContent = language === 'tr' && slides[currentSlide].tr 
+    ? slides[currentSlide].tr 
+    : slides[currentSlide].en;
+
+  // Animated stars for space theme
+  const renderStars = () => {
+    return Array.from({ length: 50 }).map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-1 h-1 bg-white rounded-full"
+        style={{
+          left: `${Math.random() * 100}%`,
+          top: `${Math.random() * 100}%`,
+        }}
+        animate={{
+          opacity: [0.2, 1, 0.2],
+          scale: [1, 1.5, 1],
+        }}
+        transition={{
+          duration: 2 + Math.random() * 2,
+          repeat: Infinity,
+          delay: Math.random() * 2,
+        }}
+      />
+    ));
+  };
+
+  if (!isStarted) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center relative overflow-hidden"
+        style={{ background: slides[0].background }}
+      >
+        {renderStars()}
+        <div className="relative z-10 text-center">
+          <motion.div
+            initial={{ scale: 0.5, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          >
+            <h1 className="text-8xl font-bold mb-6 text-gradient">StellarGo</h1>
+            <p className="text-3xl text-gray-300 mb-12">Interactive Presentation</p>
+            <motion.button
+              onClick={startPresentation}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-12 py-6 bg-[#00ff9d] text-black rounded-xl text-2xl font-bold hover:bg-[#00d480] transition-colors flex items-center gap-3 mx-auto"
+            >
+              <Maximize className="w-8 h-8" />
+              Start Presentation
+            </motion.button>
+            <p className="text-gray-400 mt-6">
+              Press ESC to exit fullscreen • Use ← → to navigate
+              {turkishEnabled && ' • Scroll to toggle language'}
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="fixed inset-0 bg-dark-900 overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0">
-        <motion.div
-          className={`absolute inset-0 bg-gradient-to-br ${currentSlideData.background || 'from-dark-900 via-dark-800 to-dark-900'}`}
-          key={currentSlide}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        />
-        
-        {/* Animated blobs */}
-        <motion.div
-          className="absolute w-[500px] h-[500px] rounded-full opacity-10"
-          style={{
-            background: 'radial-gradient(circle, rgba(0,255,65,0.4) 0%, rgba(0,255,65,0) 70%)',
-            filter: 'blur(60px)',
-          }}
-          animate={{
-            x: [0, 100, 0],
-            y: [0, -100, 0],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          style={{ left: '10%', top: '20%' }}
-        />
-      </div>
+    <div className="relative w-screen h-screen overflow-hidden">
+      {/* Background with animation */}
+      <motion.div
+        key={`bg-${currentSlide}`}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+        className="absolute inset-0"
+        style={{ background: slides[currentSlide].background }}
+      >
+        {slides[currentSlide].theme === 'space' && renderStars()}
+      </motion.div>
 
-      {/* Main Content */}
-      <div className="relative z-10 h-full flex flex-col">
-        {/* Slide Content */}
-        <div className="flex-1 flex items-center justify-center p-12">
+      {/* Main content */}
+      <div 
+        className="relative h-full flex flex-col cursor-pointer"
+        onClick={handleClick}
+        onContextMenu={handleContextMenu}
+      >
+        {/* Top bar */}
+        <div className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between p-6">
+          {!isFullscreen && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFullscreen();
+              }}
+              className="glass px-4 py-2 rounded-lg hover:bg-white/10 transition-colors"
+            >
+              <Maximize className="w-5 h-5" />
+            </button>
+          )}
+          <div className="flex-1" />
+          {turkishEnabled && (
+            <motion.button
+              onClick={(e) => {
+                e.stopPropagation();
+                setLanguage((prev) => prev === 'en' ? 'tr' : 'en');
+              }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`glass px-6 py-3 rounded-lg flex items-center gap-2 transition-colors ${
+                language === 'tr' ? 'bg-amber-500/20 border-2 border-amber-400' : 'hover:bg-white/10'
+              }`}
+            >
+              <Globe className="w-5 h-5" />
+              <span className="font-bold">{language === 'en' ? 'EN' : 'TR'}</span>
+            </motion.button>
+          )}
+        </div>
+
+        {/* Slide content */}
+        <div className="flex-1 flex items-center justify-center px-12 py-24">
           <AnimatePresence mode="wait">
             <motion.div
-              key={currentSlide}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+              key={`${currentSlide}-${language}`}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -50 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
               className="w-full max-w-7xl"
             >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="text-center space-y-6"
+              <motion.h1 
+                className={`text-6xl md:text-7xl font-bold mb-6 text-center ${
+                  language === 'tr' ? 'text-amber-400' : 'text-white'
+                }`}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
               >
-                <motion.h1
-                  className="text-7xl md:text-9xl font-display font-bold"
-                  initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.3, type: 'spring' }}
+                {currentContent!.title}
+              </motion.h1>
+              
+              {currentContent!.subtitle && (
+                <motion.p 
+                  className={`text-2xl md:text-3xl text-center mb-12 ${
+                    language === 'tr' ? 'text-amber-300' : 'text-gray-300'
+                  }`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
                 >
-                  {currentSlideData.title.split(' ').map((word, index) => (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1 }}
-                      className={index % 2 === 0 ? 'text-neon-500' : 'text-gray-100'}
-                    >
-                      {word}{' '}
-                    </motion.span>
-                  ))}
-                </motion.h1>
-                
-                {currentSlideData.subtitle && (
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.6 }}
-                    className="text-3xl md:text-4xl text-gray-400 font-light"
-                  >
-                    {currentSlideData.subtitle}
-                  </motion.p>
-                )}
+                  {currentContent!.subtitle}
+                </motion.p>
+              )}
 
-                {currentSlideData.content && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8 }}
-                  >
-                    {currentSlideData.content}
-                  </motion.div>
-                )}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+              >
+                {currentContent!.content}
               </motion.div>
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Navigation Controls */}
-        <div className="p-8 flex items-center justify-between">
-          {/* Left: Prev Button */}
-          <button
-            onClick={prevSlide}
-            className="glass px-6 py-3 rounded-xl hover:bg-white/10 transition-all duration-300"
-            disabled={currentSlide === 0}
-          >
-            ← Previous
-          </button>
+        {/* Bottom navigation */}
+        <div className="absolute bottom-0 left-0 right-0 z-50 p-6">
+          <div className="flex items-center justify-between max-w-7xl mx-auto">
+            {/* Previous button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                prevSlide();
+              }}
+              className="glass px-6 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              disabled={currentSlide === 0}
+            >
+              <ChevronLeft className="w-5 h-5" />
+              <span className="hidden md:inline">Previous</span>
+            </button>
 
-          {/* Center: Slide Indicators */}
-          <div className="flex gap-2">
-            {slides.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                  index === currentSlide
-                    ? 'bg-neon-500 w-8 shadow-neon'
-                    : 'bg-gray-600 hover:bg-gray-500'
-                }`}
-              />
-            ))}
+            {/* Slide indicators */}
+            <div className="flex items-center gap-2">
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
+                  }}
+                  className={`h-2 rounded-full transition-all ${
+                    index === currentSlide 
+                      ? 'w-12 bg-[#00ff9d]' 
+                      : 'w-2 bg-gray-500 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Next button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                nextSlide();
+              }}
+              className="glass px-6 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
+              disabled={currentSlide === slides.length - 1}
+            >
+              <span className="hidden md:inline">Next</span>
+              <ChevronRight className="w-5 h-5" />
+            </button>
           </div>
 
-          {/* Right: Next Button */}
-          <button
-            onClick={nextSlide}
-            className="glass px-6 py-3 rounded-xl hover:bg-white/10 transition-all duration-300"
-            disabled={currentSlide === slides.length - 1}
-          >
-            Next →
-          </button>
+          {/* Progress bar */}
+          <div className="mt-4 max-w-7xl mx-auto">
+            <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
+              <motion.div
+                className="h-full bg-gradient-to-r from-[#00ff9d] to-[#00d4ff]"
+                initial={{ width: 0 }}
+                animate={{ width: `${((currentSlide + 1) / slides.length) * 100}%` }}
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+          </div>
         </div>
-
-        {/* Slide Number */}
-        <div className="absolute top-8 right-8 glass px-4 py-2 rounded-xl text-gray-400">
-          {currentSlide + 1} / {slides.length}
-        </div>
-
-        {/* Presenter Mode Toggle */}
-        <button
-          onClick={() => setShowNotes(!showNotes)}
-          className="absolute top-8 left-8 glass px-4 py-2 rounded-xl hover:bg-white/10 transition-all"
-        >
-          {showNotes ? '📝 Hide Notes' : '📝 Show Notes'}
-        </button>
-
-        {/* Speaker Notes (if enabled) */}
-        {showNotes && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute bottom-24 left-8 right-8 glass p-6 rounded-2xl"
-          >
-            <h3 className="font-bold mb-2 text-neon-500">Speaker Notes:</h3>
-            <p className="text-gray-300">
-              {currentSlide === 0 && "Introduce StellarGo as a platform, not just a tool. Emphasize the vision."}
-              {currentSlide === 1 && "Highlight the problem: crypto is disconnected from physical world."}
-              {currentSlide === 2 && "Present the solution: location-based drops bring crypto to streets."}
-              {currentSlide === 3 && "CRUCIAL SLIDE: Emphasize why Stellar is the only viable choice."}
-              {currentSlide === 4 && "Explain business model and give concrete use case (Starbucks example)."}
-              {currentSlide === 5 && "Technical explanation of Soroban smart contracts."}
-              {currentSlide === 6 && "Show the modern tech stack powering the platform."}
-              {currentSlide === 7 && "Final slide: Invite judges to try the app via QR code."}
-            </p>
-          </motion.div>
-        )}
       </div>
     </div>
   );
-};
-
-export default PresentationPage;
+}
 

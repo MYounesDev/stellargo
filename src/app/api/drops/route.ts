@@ -78,7 +78,19 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(response, { status: 400 });
     }
 
-    // Create drop
+    // Note: The smart contract interaction happens on the client side via Freighter
+    // The transactionHash should be provided by the client after successful contract call
+    // This API only stores the drop metadata in the database
+    
+    if (!transactionHash) {
+      const response: ApiResponse = {
+        success: false,
+        error: 'Transaction hash required. Drop must be created on-chain first.',
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    // Create drop in database (metadata only, funds are held by smart contract)
     const drop = await DropModel.create({
       location: {
         type: 'Point',

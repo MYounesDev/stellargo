@@ -9,6 +9,9 @@ export const HORIZON_URL =
 
 export const server = new StellarSdk.Horizon.Server(HORIZON_URL);
 
+// Export STELLAR_NETWORK for use in other files
+export { STELLAR_NETWORK as NETWORK };
+
 // Get network passphrase
 export const getNetworkPassphrase = () => {
   return STELLAR_NETWORK === 'TESTNET'
@@ -16,20 +19,29 @@ export const getNetworkPassphrase = () => {
     : StellarSdk.Networks.PUBLIC;
 };
 
-// Get account balance
+// Get account balance - Fetches REAL balance from Stellar Network
 export async function getAccountBalance(publicKey: string): Promise<string> {
   try {
+    console.log(`🔍 Fetching real balance for ${publicKey.substring(0, 8)}...`);
+    
     const account = await server.loadAccount(publicKey);
+    
+    // Find native XLM balance
     const xlmBalance = account.balances.find(
       (balance) => balance.asset_type === 'native'
     );
-    return xlmBalance ? xlmBalance.balance : '0';
+    
+    const balance = xlmBalance ? xlmBalance.balance : '0';
+    console.log(`✅ Real balance: ${balance} XLM`);
+    
+    return balance;
   } catch (error: any) {
-    console.error('Error fetching balance:', error);
+    console.error('❌ Error fetching balance:', error);
     
     // If account doesn't exist (404), return 0 instead of throwing
     if (error?.response?.status === 404) {
-      console.warn('⚠️ Account not found on network. Account may need to be funded first.');
+      console.warn('⚠️ Account not found on network. Account needs to be funded first.');
+      console.log('💡 Get testnet XLM: https://laboratory.stellar.org/#account-creator?network=test');
       return '0';
     }
     

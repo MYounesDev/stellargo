@@ -50,10 +50,12 @@ Distribute aid directly, create fundraising events, and engage your community
 ### Prerequisites
 
 - Node.js 18+
+- Rust & Cargo (for smart contract)
+- Soroban CLI
 - MongoDB (local or Atlas)
 - Freighter Wallet Extension
 
-### Installation
+### Installation & Setup
 
 ```bash
 # Clone repository
@@ -63,9 +65,17 @@ cd stellargo
 # Install dependencies
 npm install
 
+# Build smart contract
+npm run build:contract:windows   # Windows
+npm run build:contract           # Mac/Linux
+
+
+cd sorbon/geo_drop
+soroban contract deploy --wasm target/wasm32-unknown-unknown/release/geo_drop.wasm --source deployer --network testnet
+
 # Configure environment
 cp .env.example .env.local
-# Edit .env.local with your MongoDB URI
+# Edit .env.local with your CONTRACT_ID and MongoDB URI
 
 # Seed database
 npm run seed
@@ -76,10 +86,10 @@ npm run dev
 
 Visit [http://localhost:3000](http://localhost:3000) 🎉
 
-**Detailed guides:**
-- [📖 Installation Guide](./INSTALL.md)
-- [🏃 Running Guide](./RUN.md)
-- [🚢 Deployment Guide](./DEPLOY.md)
+**📚 Documentation:**
+- [📖 Installation Guide](./INSTALL.md) - Detailed installation
+- [🏃 Running Guide](./RUN.md) - Running locally
+- [🚢 Deployment Guide](./DEPLOY.md) - Production deployment
 
 ---
 
@@ -98,9 +108,11 @@ Visit [http://localhost:3000](http://localhost:3000) 🎉
 - **MongoDB + Mongoose** - Database
 - **Stellar SDK** - Blockchain integration
 
-### Web3
+### Web3 & Smart Contracts
+- **Soroban Smart Contracts** - Rust-based smart contracts on Stellar
 - **Freighter API** - Stellar wallet integration
 - **Stellar Network** - Fast, low-cost transactions
+- **Real On-Chain Transactions** - All drops and claims execute on-chain
 
 ---
 

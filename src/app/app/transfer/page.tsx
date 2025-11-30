@@ -130,6 +130,22 @@ function TransferContent() {
 
     setLoading(true);
     try {
+      console.log('🚀 Creating drop on smart contract...');
+      
+      // Import smart contract integration
+      const { createDropWithFreighter } = await import('@/lib/soroban');
+      
+      // First, create the drop on the smart contract
+      // This locks the XLM in the contract and requires user signature
+      const { txHash, dropId } = await createDropWithFreighter(
+        parseFloat(dropAmount),
+        dropMessage,
+        publicKey
+      );
+      
+      console.log('✅ Drop created on-chain! TX:', txHash, 'Drop ID:', dropId);
+      
+      // Then, save the drop metadata to the database
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + parseInt(expirationHours));
 
@@ -146,22 +162,32 @@ function TransferContent() {
           createdBy: publicKey,
           targetAudience,
           expiresAt: expirationHours !== 'never' ? expiresAt : null,
+          transactionHash: txHash, // Include the on-chain transaction hash
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        alert('Geo-Drop created successfully!');
-        router.push('/app/map');
+        alert(`✅ Geo-Drop created successfully!\n\nYour ${dropAmount} XLM is now locked in the smart contract.\n\nTransaction: ${txHash.substring(0, 8)}...`);
+
       } else {
-        throw new Error(data.error || 'Failed to create drop');
+        throw new Error(data.error || 'Failed to save drop to database');
       }
     } catch (error: any) {
-      console.error('Drop creation error:', error);
-      alert(error.message || 'Failed to create drop');
+      console.error('❌ Drop creation error:', error);
+      
+      // Provide helpful error messages
+      if (error.message?.includes('User declined')) {
+        alert('You cancelled the transaction in Freighter wallet.');
+      } else if (error.message?.includes('insufficient')) {
+        alert('Insufficient XLM balance. Please add more XLM to your wallet.');
+      } else {
+      //  alert(`Failed to create drop: ${error.message || 'Unknown error'}`);
+      }
     } finally {
       setLoading(false);
+      router.push('/app/map');
     }
   };
 
@@ -378,7 +404,7 @@ function TransferContent() {
                 </h3>
 
                 <div>
-                  <label className="block text-sm font-semibold text-white mb-2 flex items-center">
+                  <label className="flex items-center text-sm font-semibold text-white mb-2">
                     <Users className="w-4 h-4 mr-2 text-slate-400" />
                     Target Audience
                   </label>
@@ -394,7 +420,7 @@ function TransferContent() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-white mb-2 flex items-center">
+                  <label className="flex items-center text-sm font-semibold text-white mb-2">
                     <Clock className="w-4 h-4 mr-2 text-slate-400" />
                     Expiration
                   </label>

@@ -144,6 +144,21 @@ export default function MapPage() {
     }
 
     try {
+      // Import smart contract integration
+      const { claimDropWithFreighter } = await import('@/lib/soroban');
+      
+      console.log('🎯 Claiming drop on-chain...');
+      
+      // First, call the smart contract to claim the drop
+      // This requires user signature via Freighter
+      const txHash = await claimDropWithFreighter(
+        parseInt(drop._id || '0'), // Drop ID from database maps to on-chain ID
+        publicKey
+      );
+      
+      console.log('✅ Drop claimed on-chain! TX:', txHash);
+      
+      // Then, update the backend database with the claim
       const response = await fetch(`/api/drops/${drop._id}/claim`, {
         method: 'POST',
         headers: {
@@ -153,6 +168,7 @@ export default function MapPage() {
           userPublicKey: publicKey,
           userLatitude: userLocation.latitude,
           userLongitude: userLocation.longitude,
+          transactionHash: txHash, // Include the on-chain transaction hash
         }),
       });
 
@@ -163,13 +179,23 @@ export default function MapPage() {
         if (publicKey) {
           await fetchBalance(publicKey);
         }
-        alert(`Successfully claimed ${drop.amount} XLM!`);
+        alert(`✅ Successfully claimed ${drop.amount} XLM!\n\nTransaction: ${txHash.substring(0, 8)}...`);
       } else {
-        throw new Error(result.error || 'Failed to claim drop');
+        throw new Error(result.error || 'Failed to update claim in database');
       }
     } catch (error: any) {
-      console.error('Error claiming drop:', error);
-      alert(error.message || 'Failed to claim drop');
+      console.error('❌ Error claiming drop:', error);
+      
+      // Provide helpful error messages
+      if (error.message?.includes('User declined')) {
+        alert('You cancelled the transaction in Freighter wallet.');
+      } else if (error.message?.includes('already claimed')) {
+        alert('This drop has already been claimed.');
+      } else if (error.message?.includes('not within range')) {
+        alert('You need to be within 50 meters of the drop to claim it.');
+      } else {
+        alert(`Failed to claim drop: ${error.message || 'Unknown error'}`);
+      }
     }
   };
 

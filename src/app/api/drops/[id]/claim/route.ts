@@ -34,7 +34,7 @@ export async function POST(
       return NextResponse.json(response, { status: 404 });
     }
 
-    // Check if already claimed
+    // Check if already claimed in database
     if (drop.claimed) {
       const response: ApiResponse = {
         success: false,
@@ -61,13 +61,23 @@ export async function POST(
       return NextResponse.json(response, { status: 400 });
     }
 
-    // Update drop as claimed
+    // Note: The smart contract interaction happens on the client side via Freighter
+    // The transactionHash should be provided by the client after successful contract claim
+    // This API validates location and updates the database
+    
+    if (!transactionHash) {
+      const response: ApiResponse = {
+        success: false,
+        error: 'Transaction hash required. Drop must be claimed on-chain first.',
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+
+    // Update drop as claimed in database
     drop.claimed = true;
     drop.claimedBy = userPublicKey;
     drop.claimedAt = new Date();
-    if (transactionHash) {
-      drop.transactionHash = transactionHash;
-    }
+    drop.transactionHash = transactionHash;
     await drop.save();
 
     const response: ApiResponse<Drop> = {

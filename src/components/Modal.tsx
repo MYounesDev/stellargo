@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface ModalProps {
   isOpen: boolean;
@@ -28,8 +30,6 @@ const Modal: React.FC<ModalProps> = ({
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
-
   const sizes = {
     sm: 'max-w-md',
     md: 'max-w-lg',
@@ -38,46 +38,45 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            onClick={onClose}
+          />
 
-      {/* Modal */}
-      <div
-        className={`relative bg-white rounded-2xl shadow-2xl ${sizes[size]} w-full max-h-[90vh] overflow-y-auto`}
-      >
-        {/* Header */}
-        {title && (
-          <div className="flex items-center justify-between p-6 border-b border-accent-200">
-            <h2 className="text-2xl font-bold text-accent-900">{title}</h2>
-            <button
-              onClick={onClose}
-              className="text-accent-400 hover:text-accent-600 transition-colors"
-            >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-        )}
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className={`relative glass-dark rounded-2xl shadow-2xl ${sizes[size]} w-full max-h-[90vh] overflow-y-auto border border-slate-800`}
+          >
+            {/* Header */}
+            {title && (
+              <div className="flex items-center justify-between p-6 border-b border-slate-800">
+                <h2 className="text-2xl font-bold text-white">{title}</h2>
+                <button
+                  onClick={onClose}
+                  className="text-green-300 hover:text-white transition-colors rounded-lg p-1 bg-green-900/60 hover:bg-green-800/80"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+            )}
 
-        {/* Content */}
-        <div className="p-6">{children}</div>
-      </div>
-    </div>
+            {/* Content */}
+            <div className="p-6">{children}</div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };
 

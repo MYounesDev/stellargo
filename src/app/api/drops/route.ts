@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import dbConnect from '@/lib/mongodb';
+import { connectToDatabase } from '@/lib/mongodb';
 import DropModel from '@/models/Drop';
 import { ApiResponse, Drop } from '@/types';
 
 // GET: Fetch all drops or drops near a location
 export async function GET(request: NextRequest) {
   try {
-    await dbConnect();
+    await connectToDatabase();
 
     const searchParams = request.nextUrl.searchParams;
     const latitude = searchParams.get('latitude');
@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
 // POST: Create a new drop
 export async function POST(request: NextRequest) {
   try {
-    await dbConnect();
+    await connectToDatabase();
 
     const body = await request.json();
     const { latitude, longitude, amount, message, createdBy, transactionHash } = body;

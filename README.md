@@ -6,11 +6,10 @@
 
 **Drop crypto anywhere on Earth. Powered by Stellar Network.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![Stellar](https://img.shields.io/badge/Stellar-Network-blue)](https://stellar.org/)
 
-[Demo](https://stellargo.vercel.app) · [Documentation](./docs) · [Report Bug](https://github.com/MYounesDev/stellargo/issues) · [Request Feature](https://github.com/MYounesDev/stellargo/issues)
+[Demo](https://stellargo.vercel.app) ·[Report Bug](https://github.com/MYounesDev/stellargo/issues) · [Request Feature](https://github.com/MYounesDev/stellargo/issues)
 
 </div>
 

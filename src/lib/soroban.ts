@@ -259,9 +259,13 @@ function extractDropIdFromResult(result: any): number {
       const meta = StellarSdk.xdr.TransactionMeta.fromXDR(result.resultMetaXdr, 'base64');
       
       // Navigate through the metadata to find the return value
-      if (meta.v3()?.sorobanMeta()?.returnValue()) {
-        const returnValue = meta.v3().sorobanMeta().returnValue();
-        return Number(StellarSdk.scValToNative(returnValue));
+      const v3Meta = meta.v3();
+      if (v3Meta) {
+        const sorobanMeta = v3Meta.sorobanMeta();
+        const returnValue = sorobanMeta?.returnValue();
+        if (returnValue) {
+          return Number(StellarSdk.scValToNative(returnValue));
+        }
       }
     }
     
@@ -308,7 +312,14 @@ export async function signTransactionWithFreighter(
     networkPassphrase: getNetworkPassphrase(),
   });
 
-  return StellarSdk.TransactionBuilder.fromXDR(signedXdr, getNetworkPassphrase());
+  const tx = StellarSdk.TransactionBuilder.fromXDR(signedXdr, getNetworkPassphrase());
+  
+  // Type guard to ensure we have a Transaction, not a FeeBumpTransaction
+  if (tx instanceof StellarSdk.Transaction) {
+    return tx;
+  }
+  
+  throw new Error('Expected Transaction but got FeeBumpTransaction');
 }
 
 /**

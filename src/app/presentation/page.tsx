@@ -273,7 +273,7 @@ export default function PresentationPage() {
                 <div className="glass-dark p-8 rounded-2xl text-center">
                   <img src="https://cdn.simpleicons.org/ethereum/627EEA" alt="Ethereum" className="w-16 h-16 mx-auto mb-4" />
                   <h4 className="text-2xl font-bold mb-4 text-red-400">Ethereum</h4>
-                  <div className="text-6xl font-bold text-red-400 mb-2">$5.00</div>
+                  <div className="text-6xl font-bold text-red-400 mb-2">$0.5</div>
                   <p className="text-xl text-gray-300">per transaction</p>
                   <p className="text-lg text-red-300 mt-4">❌ Too expensive for micro-drops</p>
                 </div>
@@ -312,7 +312,7 @@ export default function PresentationPage() {
                 <div className="glass-dark p-8 rounded-2xl text-center border-2 border-amber-500/30">
                   <img src="https://cdn.simpleicons.org/ethereum/627EEA" alt="Ethereum" className="w-16 h-16 mx-auto mb-4" />
                   <h4 className="text-2xl font-bold mb-4 text-red-400">Ethereum</h4>
-                  <div className="text-6xl font-bold text-red-400 mb-2">$5.00</div>
+                  <div className="text-6xl font-bold text-red-400 mb-2">$0.5</div>
                   <p className="text-xl text-amber-200">işlem başına</p>
                   <p className="text-lg text-red-300 mt-4">❌ Mikro-drop'lar için çok pahalı</p>
                 </div>
@@ -817,7 +817,14 @@ export default function PresentationPage() {
 
   // Navigation functions
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+    setCurrentSlide((prev) => {
+      // If on last slide, redirect to main page
+      if (prev === slides.length - 1) {
+        window.location.href = '/';
+        return prev;
+      }
+      return prev + 1;
+    });
   }, [slides.length]);
 
   const prevSlide = useCallback(() => {
@@ -859,16 +866,29 @@ export default function PresentationPage() {
     return () => window.removeEventListener('wheel', handleWheel);
   }, [turkishEnabled]);
 
-  // Mouse click navigation
+  // Mouse click navigation - Left click to advance
   const handleClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const width = rect.width;
+    // Don't navigate if clicking on interactive elements
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === 'BUTTON' || 
+      target.tagName === 'A' || 
+      target.tagName === 'NAV' ||
+      target.closest('button') || 
+      target.closest('a') ||
+      target.closest('nav')
+    ) {
+      return;
+    }
 
-    if (x > width / 2) {
-      nextSlide();
-    } else {
-      prevSlide();
+    // Left click advances to next slide
+    if (e.button === 0) {
+      // If on last slide, redirect to main page
+      if (currentSlide === slides.length - 1) {
+        window.location.href = '/';
+      } else {
+        nextSlide();
+      }
     }
   };
 
@@ -1108,9 +1128,10 @@ export default function PresentationPage() {
                 nextSlide();
               }}
               className="glass px-6 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2"
-              disabled={currentSlide === slides.length - 1}
             >
-              <span className="hidden md:inline">Next</span>
+              <span className="hidden md:inline">
+                {currentSlide === slides.length - 1 ? 'Home' : 'Next'}
+              </span>
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>

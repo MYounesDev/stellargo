@@ -18,7 +18,8 @@ import {
   Shield,
   Rocket,
   Star,
-  ChevronDown
+  ChevronDown,
+  Presentation
 } from 'lucide-react';
 import Button from '@/components/Button';
 import Card from '@/components/Card';
@@ -216,6 +217,19 @@ export default function LandingPage() {
                       whileHover={{ x: '0%' }}
                       transition={{ duration: 0.3 }}
                     />
+                  </Button>
+                </motion.div>
+              </Link>
+              <Link href="/presentation">
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <Button variant="outline" size="lg" className="group">
+                    <span className="flex items-center gap-2">
+                      <Presentation className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                      View Presentation
+                    </span>
                   </Button>
                 </motion.div>
               </Link>
@@ -551,6 +565,7 @@ export default function LandingPage() {
               {[
                 { name: 'GitHub', href: 'https://github.com/MYounesDev' },
                 { name: 'LinkedIn', href: 'https://www.linkedin.com/in/Myounesdev' },
+                { name: 'Presentation', href: '/presentation' },
                 { name: 'FAQ', href: '/faq' },
               ].map((link, i) => (
                 <motion.a

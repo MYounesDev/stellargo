@@ -22,45 +22,39 @@ export function useWallet() {
     error: null,
   });
 
-  // Check if wallet is already connected on mount
+  // Check if wallet was previously connected (from localStorage) on mount
+  // This restores the connection state without triggering the Freighter popup
   useEffect(() => {
-    const checkWalletConnection = async () => {
+    const checkPreviousConnection = async () => {
       try {
-        // Check if Freighter reports being connected
-        const connected = await isConnected();
+        // Check localStorage for previous connection
+        const savedAddress = localStorage.getItem('walletAddress');
         
-        if (connected) {
-          // Try to get the public key
-          try {
-            const pubKey = await getPublicKey();
-            
+        if (savedAddress) {
+          // Check if Freighter is still connected (doesn't trigger popup)
+          const connected = await isConnected();
+          
+          if (connected) {
+            // Wallet is still connected, restore the state
             setState({
-              publicKey: pubKey,
+              publicKey: savedAddress,
               isConnected: true,
               isLoading: false,
               error: null,
             });
-            
-            // Store in localStorage for persistence
-            localStorage.setItem('walletAddress', pubKey);
-          } catch (error) {
-            // If getPublicKey fails, wallet might be locked
-            console.log('Wallet is connected but locked or access denied');
-            setState({
-              publicKey: null,
-              isConnected: false,
-              isLoading: false,
-              error: null,
-            });
+            console.log('✅ Restored wallet connection from localStorage');
+          } else {
+            // Wallet was disconnected, clear localStorage
+            localStorage.removeItem('walletAddress');
           }
         }
       } catch (error) {
-        // If isConnected fails, Freighter is likely not installed
+        // If isConnected fails, Freighter might not be installed
         console.log('Freighter check failed - extension might not be installed');
       }
     };
 
-    checkWalletConnection();
+    checkPreviousConnection();
   }, []);
 
   const connect = useCallback(async () => {
